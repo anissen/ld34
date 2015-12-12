@@ -56,9 +56,12 @@ class Main extends luxe.Game {
 			        shockwaveEffect.effect_time = 3.0;
 			        shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(drop.pos);
 				case Sun:
-					bloomEffect.radius = 4.0;
-					sepiaEffect.amount = 0.5;
-
+					bloomEffect.radius = 3.5;
+					Luxe.events.fire('got_sun');
+				case Time:
+					sepiaEffect.amount = 1;
+					luxe.tween.Actuate.tween(Luxe, 1, { timescale: 0.05 }).reflect().repeat(1)
+						.ease(luxe.tween.easing.Cubic.easeInOut);
 			}
 		});
 	}

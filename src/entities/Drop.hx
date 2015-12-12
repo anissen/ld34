@@ -8,6 +8,7 @@ import luxe.Color;
 enum DropType {
     Sun;
     Rain;
+    Time;
 }
 
 class Drop extends Sprite {
@@ -20,6 +21,8 @@ class Drop extends Sprite {
 
     override public function update(dt :Float) {
         pos.y += dt * 150;
+
+        // TODO: Tween this
 
         // Luxe.draw.circle({
         //     x: pos.x,
@@ -37,13 +40,16 @@ class SunDrop extends Drop {
         super({
             name: "Drop.Sun." + Luxe.utils.uniqueid(),
             texture: Luxe.resources.texture('assets/sprites/sun.png'),
-            scale: new Vector(0.4, 0.4)
+            scale: new Vector(0.4, 0.4),
+            rotation_z: 360 * Math.random()
         });
         dropType = Sun;
     }
 }
 
 class RainDrop extends Drop {
+    var randomRotation :Float;
+
     public function new() {
         super({
             name: "Drop.Rain." + Luxe.utils.uniqueid(),
@@ -51,5 +57,22 @@ class RainDrop extends Drop {
             scale: new Vector(0.4, 0.4)
         });
         dropType = Rain;
+        randomRotation = 1 - 2 * Math.random();
+    }
+
+    override public function update(dt :Float) {
+        super.update(dt);
+        rotation_z += randomRotation * dt;
+    }
+}
+
+class TimeDrop extends Drop {
+    public function new() {
+        super({
+            name: "Drop.Time." + Luxe.utils.uniqueid(),
+            texture: Luxe.resources.texture('assets/sprites/hourglass.png'),
+            scale: new Vector(Luxe.utils.random.bool() ? 0.4 : -0.4, 0.4)
+        });
+        dropType = Time;
     }
 }

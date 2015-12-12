@@ -14,6 +14,7 @@ class Play extends State {
 
 	var tree :Tree;
 	var drops :Array<Drop>;
+	var next_drop :Float;
 
 	public function new() {
 		super({ name: 'Play' });
@@ -26,6 +27,7 @@ class Play extends State {
 		Luxe.scene = stateScene;
 
 		drops = [];
+		next_drop = 0;
 
 		new luxe.Sprite({
 			pos: new Vector(0, 0),
@@ -50,6 +52,10 @@ class Play extends State {
 		Luxe.draw.circle({ x: 200, y: -400, r: 80, color: new luxe.Color(0.8, 0.6, 0) }); // sun
 
 		tree = new Tree();
+
+		Luxe.events.listen('got_sun', function(_) {
+            tree.highlight = 1.0;
+        });
 	}
 
 	// override function onrender() {
@@ -63,6 +69,9 @@ class Play extends State {
 	}
 
 	override public function update(dt :Float) {
+		if (tree.highlight > 0) tree.highlight -= dt * 1.5;
+		if (tree.highlight < 0) tree.highlight = 0;
+
 		var pos = tree.get_top();
 		for (drop in drops) {
 			if (Vector.Subtract(drop.pos, pos).length < 30) {
@@ -73,6 +82,12 @@ class Play extends State {
 		}
 		pos.x = Luxe.camera.center.x;
 		Luxe.camera.focus(pos, 0.2);
+
+		next_drop -= dt;
+		if (next_drop <= 0) {
+			create_drop();
+			next_drop = 1.5 * Math.random();
+		}
 	}
 
 	override public function onkeyup(event :luxe.Input.KeyEvent) {
@@ -83,7 +98,14 @@ class Play extends State {
     }
 
 	function create_drop() {
-		var drop = (Math.random() < 0.3 ? new RainDrop() : new SunDrop());
+		var random = Math.random();
+		var drop = if (random < 0.1) {
+			new TimeDrop();
+		} else if (random < 0.4) {
+			new RainDrop();
+		} else {
+			new SunDrop();
+		}
 		drop.pos = new Vector(-Luxe.screen.width / 2 + Luxe.screen.width * Math.random(), -Luxe.screen.height); drops.push(drop);
 	}
 }

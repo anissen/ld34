@@ -21,6 +21,7 @@ class Tree extends Entity {
     var target :Vector;
     var points :Int = 0;
     var lock_countdown :Float;
+    public var highlight :Float;
 
     public function new() {
         super({name: "Tree"});
@@ -30,8 +31,9 @@ class Tree extends Entity {
         lastSegment.y = 0;
 
         lock_countdown = 10;
+        highlight = 0.0;
 
-        Luxe.events.listen('got_drop', function(drop :Drop) {
+        Luxe.events.listen('sun_drop', function(drop :Drop) {
             points++;
             if (points % 10 == 0) {
                 add_segment();
@@ -40,7 +42,6 @@ class Tree extends Entity {
     }
 
     function add_segment() {
-        trace('add_segment');
         numSegments++;
         // var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
         segments.unshift({ x: 0, y: 0, angle: 0 });
@@ -108,14 +109,14 @@ class Tree extends Entity {
         var tangent = new Vector(-temp.y, temp.x);
 
         if (i < numSegments - locked_segments) { // draw outline
-            var pt2 = Vector.Multiply(tangent, min_width + (i + 2) * width_increase);
-            var pt3 = Vector.Multiply(tangent, min_width + (i + 1) * width_increase);
+            var pt2 = Vector.Multiply(tangent, min_width + (i + 1.5 + highlight) * width_increase);
+            var pt3 = Vector.Multiply(tangent, min_width + (i + 0.5 + highlight) * width_increase);
 
             Luxe.draw.circle({
                 x: seg.x,
                 y: seg.y,
-                r: min_width + (i + 2) * width_increase,
-                color: new Color(1.0, 1.0, 1.0),
+                r: min_width + (i + 1.8 + highlight) * width_increase,
+                color: get_highlight_color(),
                 immediate: true
             });
 
@@ -124,7 +125,7 @@ class Tree extends Entity {
                     Vector.Add(p0, pt2), Vector.Subtract(p0, pt2),
                     Vector.Subtract(p1, pt3), Vector.Add(p1, pt3)
                 ],
-                color: new Color(1.0, 1.0, 1.0),
+                color: get_highlight_color(),
                 immediate: true
             });
         }
@@ -136,7 +137,7 @@ class Tree extends Entity {
             x: seg.x,
             y: seg.y,
             r: min_width + (i + 1) * width_increase,
-            color: new Color(0.0, 0.5 - ((i + 1) / numSegments) * 0.5, 0.0),
+            color: get_color(i + 1),
             immediate: true
         });
 
@@ -146,13 +147,22 @@ class Tree extends Entity {
                 Vector.Subtract(p1, p3), Vector.Add(p1, p3)
             ],
             colors: [
-                new Color(0.0, 0.5 - ((i + 1) / numSegments) * 0.5, 0.0),
-                new Color(0.0, 0.5 - ((i + 1) / numSegments) * 0.5, 0.0),
-                new Color(0.0, 0.5 - (i / numSegments) * 0.5, 0.0),
-                new Color(0.0, 0.5 - (i / numSegments) * 0.5, 0.0)
+                get_color(i + 1),
+                get_color(i + 1),
+                get_color(i),
+                get_color(i)
             ],
             immediate: true
         });
+    }
+
+    function get_highlight_color() {
+        return new Color(1.0 - highlight, 1.0, 1.0 - highlight);
+    }
+
+    function get_color(i :Int) {
+        var highlight_value = highlight * 0.5 - (i / numSegments) * 0.5;
+        return new Color(highlight_value, 0.6 - (i / numSegments) * 0.4, highlight_value);
     }
 
     public function lock_segment() :Void {

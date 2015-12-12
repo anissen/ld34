@@ -13,6 +13,7 @@
         { "id": "assets/backgrounds/montains.png" },
         { "id": "assets/backgrounds/grass.png" },
         { "id": "assets/sprites/sun.png" },
-        { "id": "assets/sprites/rain.png" }
+        { "id": "assets/sprites/rain.png" },
+        { "id": "assets/sprites/hourglass.png" }
     ]
 }
