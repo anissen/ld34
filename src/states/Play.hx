@@ -60,4 +60,10 @@ class Play extends State {
 		stateScene.empty();
 		Luxe.scene = lastStateScene;
 	}
+
+	override public function onkeyup(event :luxe.Input.KeyEvent) {
+        switch (event.keycode) {
+			case luxe.Input.Key.key_l: tree.lock_segment();
+		}
+    }
 }

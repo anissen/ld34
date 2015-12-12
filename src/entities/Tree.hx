@@ -8,8 +8,7 @@ import luxe.Color;
 typedef Segment = {
     x :Float,
     y :Float,
-    angle :Float,
-    locked :Bool
+    angle :Float
 };
 
 class Tree extends Entity {
@@ -18,24 +17,23 @@ class Tree extends Entity {
     var segLength :Float = 40;
     var max_width :Float = 20;
     var min_width :Float = 1;
-    var targetX :Float;
-    var targetY :Float;
+    var locked_segments :Int = 0;
+    var target :Vector;
 
     public function new() {
         super({name: "Tree"});
-        segments = [ for (i in 0 ... numSegments) { x: 0, y: 0, angle: 0, locked: false } ];
+        segments = [ for (i in 0 ... numSegments) { x: 0, y: 0, angle: 0 } ];
         var lastSegment = segments[numSegments-1];
         lastSegment.x = 0;
         lastSegment.y = 0;
     }
 
     override public function update(dt :Float) {
-        var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        reach_segment(segments[0], pos.x, pos.y);
-        for(i in 1 ... numSegments) {
-            reach_segment(segments[i], targetX, targetY);
+        target = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
+        for (i in 0 ... numSegments - locked_segments) {
+            reach_segment(segments[i]);
         }
-        for(i in 1 ... numSegments) {
+        for (i in 1 ... numSegments) {
             var index = numSegments - i;
             position_segment(segments[index], segments[index-1]);
         }
@@ -49,12 +47,12 @@ class Tree extends Entity {
         b.y = a.y + Math.sin(a.angle) * segLength;
     }
 
-    function reach_segment(seg :Segment, xin :Float, yin :Float) {
-        var dx :Float = xin - seg.x;
-        var dy :Float = yin - seg.y;
+    function reach_segment(seg :Segment) {
+        var dx :Float = target.x - seg.x;
+        var dy :Float = target.y - seg.y;
         seg.angle = Math.atan2(dy, dx);
-        targetX = xin - Math.cos(seg.angle) * segLength;
-        targetY = yin - Math.sin(seg.angle) * segLength;
+        target.x -= Math.cos(seg.angle) * segLength;
+        target.y -= Math.sin(seg.angle) * segLength;
     }
 
     function draw_segment(seg :Segment, i :Int) {
@@ -114,11 +112,7 @@ class Tree extends Entity {
     }
 
     public function lock_segment() {
-        for (s in segments) {
-            if (!s.locked) {
-                s.locked = true;
-                return;
-            }
-        }
+        locked_segments++;
+        // rigidness -= 0.1;
     }
 }
