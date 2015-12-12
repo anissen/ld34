@@ -48,9 +48,6 @@ class Play extends State {
 			depth: 1
 		});
 
-		Luxe.draw.circle({ x: 200, y: -400, r: 90, color: new luxe.Color(1.0, 0.8, 0) }); // sun
-		Luxe.draw.circle({ x: 200, y: -400, r: 80, color: new luxe.Color(0.8, 0.6, 0) }); // sun
-
 		tree = new Tree();
 
 		Luxe.events.listen('got_sun', function(_) {
@@ -58,10 +55,10 @@ class Play extends State {
         });
 	}
 
-	// override function onrender() {
-	// 	Luxe.draw.circle({ x: 200, y: -400, r: 90, color: new luxe.Color(1.0, 0.8, 0), immediate: true }); // sun
-	// 	Luxe.draw.circle({ x: 200, y: -400, r: 80, color: new luxe.Color(0.8, 0.6, 0), immediate: true }); // sun
-	// }
+	override function onrender() {
+		Luxe.draw.circle({ x: 200, y: Luxe.camera.pos.y + 130, r: 90, color: new luxe.Color(0.8, 0.6, 0), immediate: true }); // sun
+		Luxe.draw.circle({ x: 200, y: Luxe.camera.pos.y + 130, r: 80 + tree.highlight * 10, color: new luxe.Color(1.0, 0.9, 0.2), immediate: true }); // sun
+	}
 
 	override function onleave<T>(_:T) {
 		stateScene.empty();
