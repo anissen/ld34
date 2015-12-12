@@ -11,6 +11,7 @@ class Main extends luxe.Game {
 	var effects:Effects = new Effects();
     var bloomEffect :BloomEffect;
 	var shockwaveEffect :ShockwaveEffect;
+	var sepiaEffect :SepiaEffect;
 
     override function config(config:luxe.AppConfig) {
         config.preload.jsons.push({ id: 'assets/parcel.json' });
@@ -39,6 +40,8 @@ class Main extends luxe.Game {
         shockwaveEffect = new ShockwaveEffect();
         effects.addEffect(shockwaveEffect);
 
+		sepiaEffect = new SepiaEffect();
+		effects.addEffect(sepiaEffect);
 		effects.addEffect(new VignetteEffect());
 
 		// set up the state machine
@@ -46,10 +49,17 @@ class Main extends luxe.Game {
 		fsm.add(new states.Play());
 		fsm.set('Play');
 
-		Luxe.events.listen('got_drop', function(data :{ pos :luxe.Vector }) {
-			shockwaveEffect.elapsed_effect_time = 0.0;
-	        shockwaveEffect.effect_time = 3.0;
-	        shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(data.pos);
+		Luxe.events.listen('got_drop', function(drop :entities.Drop) {
+			switch (drop.dropType) {
+				case Rain:
+					shockwaveEffect.elapsed_effect_time = 0.0;
+			        shockwaveEffect.effect_time = 3.0;
+			        shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(drop.pos);
+				case Sun:
+					bloomEffect.radius = 4.0;
+					sepiaEffect.amount = 0.5;
+
+			}
 		});
 	}
 
@@ -64,7 +74,8 @@ class Main extends luxe.Game {
     }
 
 	override function update(dt:Float) {
-		// if (bloomEffect != null) bloomEffect.radius = Math.abs(Math.sin(Luxe.time * 0.5)) * 5.0;
+		if (bloomEffect != null && bloomEffect.radius > 2) bloomEffect.radius -= dt;
+		if (sepiaEffect != null && sepiaEffect.amount > 0) sepiaEffect.amount -= dt * 0.1;
 		effects.update(dt);
 	}
 

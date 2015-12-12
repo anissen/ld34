@@ -5,18 +5,19 @@ varying vec2 tcoord;
 varying vec4 color;
 
 uniform vec3 greyscaleConversion;
-uniform vec3 sepiaColour;
+uniform vec3 sepiaColor;
+uniform float amount;
 
 void main() {
-	vec4 fragColour = color * texture2D(tex0, tcoord);
+	vec4 fragColor = color * texture2D(tex0, tcoord);
 
-	/*vec4 sepia = vec4(fragColour.a);
-	sepia.r = (fragColour.r * 0.393) + (fragColour.g * 0.769) + (fragColour.b * 0.189);
-	sepia.g = (fragColour.r * 0.349) + (fragColour.g * 0.686) + (fragColour.b * 0.168);
-	sepia.b = (fragColour.r * 0.272) + (fragColour.g * 0.534) + (fragColour.b * 0.131);
+	/*vec4 sepia = vec4(fragColor.a);
+	sepia.r = (fragColor.r * 0.393) + (fragColor.g * 0.769) + (fragColor.b * 0.189);
+	sepia.g = (fragColor.r * 0.349) + (fragColor.g * 0.686) + (fragColor.b * 0.168);
+	sepia.b = (fragColor.r * 0.272) + (fragColor.g * 0.534) + (fragColor.b * 0.131);
 
 	gl_FragColor = sepia;*/
 
-	float grey = dot(fragColour.rgb, greyscaleConversion);
-	gl_FragColor = vec4(vec3(grey) * sepiaColour, fragColour.a);
+	float grey = dot(fragColor.rgb, greyscaleConversion);
+	gl_FragColor = vec4(mix(fragColor.rgb, vec3(grey) * sepiaColor, amount), fragColor.a);
 }

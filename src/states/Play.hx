@@ -66,7 +66,7 @@ class Play extends State {
 		var pos = tree.get_top();
 		for (drop in drops) {
 			if (Vector.Subtract(drop.pos, pos).length < 30) {
-				Luxe.events.fire('got_drop', { pos: drop.pos.clone() });
+				Luxe.events.fire('got_drop', drop);
 				drop.destroy();
 				drops.remove(drop);
 			}

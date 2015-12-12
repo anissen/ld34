@@ -58,14 +58,14 @@ class Effects {
 	}
 
 	public function setFlip(flip:Bool) {
-		// if(flip) {
-		// 	screenVisual.pos.y = Luxe.screen.h - screenTextureSize;
-		// 	cast(screenVisual.geometry, QuadGeometry).flipy = true;
-		// }
-		// else {
-		// 	screenVisual.pos.y = 0;
-		// 	cast(screenVisual.geometry, QuadGeometry).flipy = false;
-		// }
+		if(flip) {
+			// screenVisual.pos.y = Luxe.screen.h - screenTextureSize;
+			cast(screenVisual.geometry, QuadGeometry).flipy = true;
+		}
+		else {
+			// screenVisual.pos.y = 0;
+			cast(screenVisual.geometry, QuadGeometry).flipy = false;
+		}
 	}
 
 	public function addEffect(effect:Effect) {

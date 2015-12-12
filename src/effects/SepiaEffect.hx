@@ -14,7 +14,9 @@ class SepiaEffect extends Effect {
 	var shader:Shader;
 
 	var greyscaleConversion:Vector = new Vector(0.299, 0.587, 0.114);
-	var sepiaColour:Vector = new Vector(1.3, 1.1, 0.9);
+	var sepiaColor:Vector = new Vector(1.3, 1.1, 0.9);
+
+	@:isVar public var amount(default, set) :Float;
 
 	public function new() {
 		super('SepiaEffect');
@@ -24,9 +26,16 @@ class SepiaEffect extends Effect {
 		// load the shader
 		shader = Luxe.resources.shader('sepia');
 		shader.set_vector3('greyscaleConversion', greyscaleConversion);
-		shader.set_vector3('sepiaColour', sepiaColour);
+		shader.set_vector3('sepiaColor', sepiaColor);
 
 		setupVisuals();
 		outputVisual.shader = shader;
+	}
+
+	function set_amount(_a :Float) {
+		if(shader != null) {
+			shader.set_float('amount', _a);
+		}
+		return amount = _a;
 	}
 }

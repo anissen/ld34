@@ -14,7 +14,7 @@ typedef Segment = {
 class Tree extends Entity {
     var numSegments :Int = 5;
     var segments :Array<Segment>;
-    var segLength :Float = 50;
+    var segLength :Float = 80;
     var max_width :Float = 20;
     var min_width :Float = 1;
     var locked_segments :Int = 0;
@@ -31,9 +31,9 @@ class Tree extends Entity {
 
         lock_countdown = 10;
 
-        Luxe.events.listen('got_drop', function(data :{ pos :luxe.Vector }) {
+        Luxe.events.listen('got_drop', function(drop :Drop) {
             points++;
-            if (points % 3 == 0) {
+            if (points % 10 == 0) {
                 add_segment();
             }
         });
@@ -51,7 +51,7 @@ class Tree extends Entity {
         lock_countdown -= dt;
         if (lock_countdown <= 0) {
             if (locked_segments < numSegments) lock_segment();
-            lock_countdown = 10;
+            lock_countdown = 10 - numSegments / 5;
         }
         calc_tree();
         draw_tree();
