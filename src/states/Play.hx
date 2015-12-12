@@ -87,7 +87,7 @@ class Play extends State {
 		next_drop -= dt;
 		if (next_drop <= 0) {
 			create_drop();
-			next_drop = 2 * Math.random();
+			next_drop = 3 * Math.random();
 		}
 	}
 
@@ -102,11 +102,12 @@ class Play extends State {
 		var random = Math.random();
 		var drop = if (random < 0.1) {
 			new TimeDrop();
-		} else if (random < 0.4) {
+		} else if (random < 0.3) {
 			new RainDrop();
 		} else {
 			new SunDrop();
 		}
-		drop.pos = new Vector(-Luxe.screen.width / 2 + Luxe.screen.width * Math.random(), -Luxe.screen.height); drops.push(drop);
+		drop.pos = new Vector(-Luxe.screen.width / 2 + Luxe.screen.width * Math.random(), tree.get_top().y - Luxe.screen.height);
+		drops.push(drop);
 	}
 }

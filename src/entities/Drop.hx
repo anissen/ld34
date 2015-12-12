@@ -20,7 +20,8 @@ class Drop extends Sprite {
     }
 
     override public function update(dt :Float) {
-        pos.y += dt * 150;
+        pos.y += dt * 200;
+        pos.x += dt * (-10 + 20 * Math.random());
 
         // TODO: Tween this
 

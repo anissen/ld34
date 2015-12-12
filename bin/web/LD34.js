@@ -472,6 +472,7 @@ Main.prototype = $extend(luxe_Game.prototype,{
 				_g1.shockwaveEffect.elapsed_effect_time = 0.0;
 				_g1.shockwaveEffect.effect_time = 3.0;
 				_g1.shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(drop.get_pos());
+				Luxe.events.fire("got_rain");
 				break;
 			case 0:
 				_g1.bloomEffect.set_radius(3.5);
@@ -2055,7 +2056,9 @@ entities_Drop.__super__ = luxe_Sprite;
 entities_Drop.prototype = $extend(luxe_Sprite.prototype,{
 	update: function(dt) {
 		var _g = this.get_pos();
-		_g.set_y(_g.y + dt * 150);
+		_g.set_y(_g.y + dt * 200);
+		var _g1 = this.get_pos();
+		_g1.set_x(_g1.x + dt * (-10 + 20 * Math.random()));
 	}
 	,init: function() {
 		luxe_Sprite.prototype.init.call(this);
@@ -2123,8 +2126,8 @@ var entities_Tree = function() {
 	this.points = 0;
 	this.locked_segments = 0;
 	this.min_width = 1;
-	this.max_width = 20;
-	this.segLength = 80;
+	this.max_width = 10;
+	this.segLength = 60;
 	this.numSegments = 5;
 	var _g1 = this;
 	luxe_Entity.call(this,{ name : "Tree"});
@@ -2141,12 +2144,12 @@ var entities_Tree = function() {
 	lastSegment.y = 0;
 	this.lock_countdown = 10;
 	this.highlight = 0.0;
-	Luxe.events.listen("sun_drop",function(drop) {
+	Luxe.events.listen("got_sun",function(drop) {
 		_g1.points++;
-		if(_g1.points % 3 == 0) _g1.add_segment();
+		if(_g1.points % 5 == 0) _g1.add_segment();
 	});
-	Luxe.events.listen("rain_drop",function(drop1) {
-		_g1.lock_countdown += 2;
+	Luxe.events.listen("got_rain",function(drop1) {
+		_g1.lock_countdown += 3;
 	});
 };
 $hxClasses["entities.Tree"] = entities_Tree;
@@ -2156,6 +2159,7 @@ entities_Tree.prototype = $extend(luxe_Entity.prototype,{
 	add_segment: function() {
 		this.numSegments++;
 		this.segments.unshift({ x : 0, y : 0, angle : 0});
+		this.max_width++;
 		this.calc_tree();
 	}
 	,update: function(dt) {
@@ -2168,7 +2172,7 @@ entities_Tree.prototype = $extend(luxe_Entity.prototype,{
 		this.draw_tree();
 	}
 	,get_lock_countdown: function() {
-		return Math.max(3,15 - this.numSegments);
+		return Math.max(4,20 - this.numSegments);
 	}
 	,calc_tree: function() {
 		this.target = Luxe.camera.screen_point_to_world(Luxe.core.screen.cursor.get_pos());
@@ -2199,8 +2203,8 @@ entities_Tree.prototype = $extend(luxe_Entity.prototype,{
 		b.y = a.y + Math.sin(a.angle) * this.segLength;
 	}
 	,reach_segment: function(seg) {
-		var dx = this.target.x - seg.x;
-		var dy = this.target.y - seg.y;
+		var dx = luxe_utils_Maths.clamp(this.target.x - seg.x,-20,20);
+		var dy = luxe_utils_Maths.clamp(this.target.y - seg.y,-20,20);
 		seg.angle = Math.atan2(dy,dx);
 		var _g = this.target;
 		_g.set_x(_g.x - Math.cos(seg.angle) * this.segLength);
@@ -23494,7 +23498,7 @@ states_Play.prototype = $extend(luxe_State.prototype,{
 		this.next_drop -= dt;
 		if(this.next_drop <= 0) {
 			this.create_drop();
-			this.next_drop = 2 * Math.random();
+			this.next_drop = 3 * Math.random();
 		}
 	}
 	,onkeyup: function(event) {
@@ -23511,8 +23515,8 @@ states_Play.prototype = $extend(luxe_State.prototype,{
 	,create_drop: function() {
 		var random = Math.random();
 		var drop;
-		if(random < 0.1) drop = new entities_TimeDrop(); else if(random < 0.4) drop = new entities_RainDrop(); else drop = new entities_SunDrop();
-		drop.set_pos(new phoenix_Vector(-Luxe.core.screen.width / 2 + Luxe.core.screen.width * Math.random(),-Luxe.core.screen.height));
+		if(random < 0.1) drop = new entities_TimeDrop(); else if(random < 0.3) drop = new entities_RainDrop(); else drop = new entities_SunDrop();
+		drop.set_pos(new phoenix_Vector(-Luxe.core.screen.width / 2 + Luxe.core.screen.width * Math.random(),this.tree.get_top().y - Luxe.core.screen.height));
 		this.drops.push(drop);
 	}
 	,__class__: states_Play

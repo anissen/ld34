@@ -55,6 +55,7 @@ class Main extends luxe.Game {
 					shockwaveEffect.elapsed_effect_time = 0.0;
 			        shockwaveEffect.effect_time = 3.0;
 			        shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(drop.pos);
+					Luxe.events.fire('got_rain');
 				case Sun:
 					bloomEffect.radius = 3.5;
 					Luxe.events.fire('got_sun');

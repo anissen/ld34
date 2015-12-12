@@ -14,14 +14,15 @@ typedef Segment = {
 class Tree extends Entity {
     var numSegments :Int = 5;
     var segments :Array<Segment>;
-    var segLength :Float = 80;
-    var max_width :Float = 20;
+    var segLength :Float = 60;
+    var max_width :Float = 10;
     var min_width :Float = 1;
     var locked_segments :Int = 0;
     var target :Vector;
     var points :Int = 0;
     var lock_countdown :Float;
     public var highlight :Float;
+
 
     public function new() {
         super({name: "Tree"});
@@ -33,14 +34,14 @@ class Tree extends Entity {
         lock_countdown = 10;
         highlight = 0.0;
 
-        Luxe.events.listen('sun_drop', function(drop :Drop) {
+        Luxe.events.listen('got_sun', function(drop :Drop) {
             points++;
-            if (points % 3 == 0) {
+            if (points % 5 == 0) {
                 add_segment();
             }
         });
 
-        Luxe.events.listen('rain_drop', function(drop :Drop) {
+        Luxe.events.listen('got_rain', function(drop :Drop) {
             lock_countdown += 3;
         });
     }
@@ -49,6 +50,7 @@ class Tree extends Entity {
         numSegments++;
         // var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
         segments.unshift({ x: 0, y: 0, angle: 0 });
+        max_width++;
         calc_tree();
     }
 
@@ -68,6 +70,9 @@ class Tree extends Entity {
 
     function calc_tree() {
         target = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
+        // var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
+        // var blah = new Vector(segments[0].x, segments[0].y);
+        // target = new Vector((blah.x + pos.x) / 2, (blah.y + pos.y) / 2);
         for (i in 0 ... numSegments - locked_segments) {
             reach_segment(segments[i]);
         }
