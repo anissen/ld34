@@ -16,5 +16,8 @@
         { "id": "assets/sprites/rain.png" },
         { "id": "assets/sprites/hourglass.png" },
         { "id": "assets/sprites/poison.png" }
+    ],
+    "fonts": [
+        { "id": "assets/montez/montez.fnt" }
     ]
 }

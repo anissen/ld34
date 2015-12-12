@@ -4,6 +4,8 @@ import luxe.States;
 import luxe.Scene;
 import luxe.Vector;
 import luxe.Color;
+import luxe.Sprite;
+import luxe.Text;
 
 import entities.Tree;
 import entities.Drop;
@@ -15,6 +17,11 @@ class Play extends State {
 	var tree :Tree;
 	var drops :Array<Drop>;
 	var next_drop :Float;
+
+	var overlay :Sprite;
+	var headingText :Text;
+	var introText :Text;
+	var intro :Bool;
 
 	public function new() {
 		super({ name: 'Play' });
@@ -57,6 +64,42 @@ class Play extends State {
 		Luxe.events.listen('got_poison', function(_) {
             tree.poison = 1.0;
         });
+
+		overlay = new Sprite({
+			pos: Luxe.camera.center,
+            name: 'overlay',
+            centered: true,
+            size: Luxe.screen.size.clone().multiplyScalar(2),
+            color: new Color(1,1,0.5,0),
+            depth: 10
+        });
+
+		overlay.color.tween(2, { a: 0.95 }).delay(0.5);
+
+		spring_intro();
+	}
+
+	function spring_intro() {
+		intro = true;
+		Luxe.events.fire('start_intro', null);
+        headingText = new luxe.Text({
+	        pos: Vector.Subtract(Luxe.camera.center, new Vector(0, Luxe.screen.height / 3)),
+	        point_size: 96,
+	        depth: 13,
+	        align: luxe.Text.TextAlign.center,
+	        font: Luxe.resources.font('assets/montez/montez.fnt'),
+	        text: '-Spring-',
+	        color: new Color(0,0,0,1) //.rgb(0x242424)
+        });
+		headingText = new luxe.Text({
+	        pos: Luxe.camera.center,
+	        point_size: 48,
+	        depth: 13,
+	        align: luxe.Text.TextAlign.center,
+	        font: Luxe.resources.font('assets/montez/montez.fnt'),
+	        text: 'The first day\nthat she planted it,\nwas just a twig',
+	        color: new Color(0,0,0,1).rgb(0x242424)
+        });
 	}
 
 	override function onrender() {
@@ -70,6 +113,8 @@ class Play extends State {
 	}
 
 	override public function update(dt :Float) {
+		if (intro) dt = 0;
+
 		if (tree.highlight > 0) tree.highlight -= dt * 1.5;
 		if (tree.highlight < 0) tree.highlight = 0;
 		if (tree.poison > 0) tree.poison -= dt * 1.5;

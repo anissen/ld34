@@ -44,10 +44,9 @@ class Main extends luxe.Game {
 		effects.addEffect(sepiaEffect);
 		effects.addEffect(new VignetteEffect());
 
-		// set up the state machine
-		fsm = new States();
-		fsm.add(new states.Play());
-		fsm.set('Play');
+		Luxe.events.listen('start_intro', function(_) {
+			bloomEffect.radius = 0.5;
+		});
 
 		Luxe.events.listen('got_drop', function(drop :entities.Drop) {
 			switch (drop.dropType) {
@@ -67,6 +66,11 @@ class Main extends luxe.Game {
 					Luxe.events.fire('got_poison');
 			}
 		});
+
+		// set up the state machine
+		fsm = new States();
+		fsm.add(new states.Play());
+		fsm.set('Play');
 	}
 
 	override function onkeyup( e:KeyEvent ) {
