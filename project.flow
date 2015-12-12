@@ -1,0 +1,33 @@
+{
+	luxe:{
+		window: {
+			width: 640,
+            height: 640,
+			title: 'LD34',
+			fullscreen: false,
+			resizable: false,
+			borderless: false
+		}
+	},
+
+	project: {
+		name: 'LD34',
+		version: '0.0.0',
+		author: 'Anders Nissen',
+
+		app: {
+			name: 'LD34',
+			package: 'com.andersnissen.ld34'
+		},
+
+		build: {
+			dependencies: {
+				luxe: '*',
+			}
+		},
+
+		files: {
+			assets : 'assets/'
+		}
+	}
+}

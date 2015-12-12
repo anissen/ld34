@@ -1,0 +1,19 @@
+
+LD mechanic ideas:
+· inverse kinematics
+· buoyancy + stacking
+· quiz
+· Perlin noise
+· markov chain
+· rigid body physics
+· soft body physics
+· single tap + watch progress
+· boids
+· time scaling
+
+
+Game ideas:
+· IK snake (midgårdsormen)
+· Necromancy army
+· Semen race
+· Packman
