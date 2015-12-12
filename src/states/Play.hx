@@ -19,10 +19,18 @@ class Play extends State {
 	}
 
 	override function onenter<T>(_:T) {
-		Luxe.camera.center = new Vector(0, -Luxe.screen.height / 2 + 100);
+		Luxe.camera.center = new Vector(0, -Luxe.screen.height / 2 + 50);
 		lastStateScene = Luxe.scene;
 		Luxe.scene = stateScene;
 
+		new luxe.Sprite({
+			pos: new Vector(0, 0),
+			texture: Luxe.resources.texture('assets/backgrounds/summer.png'),
+			scale: new Vector(1.1, 1.1),
+			depth: -1
+		});
+
+		Luxe.draw.circle({ x: 200, y: -400, r: 90, color: new luxe.Color(1.0, 0.8, 0) }); // sun
 		Luxe.draw.circle({ x: 200, y: -400, r: 80, color: new luxe.Color(0.8, 0.6, 0) }); // sun
 
 		tree = new Tree();
@@ -30,6 +38,15 @@ class Play extends State {
 		Luxe.draw.box({
 			x: -Luxe.screen.width,
 			y: 0,
+			w: Luxe.screen.width * 2,
+			h: 200,
+			color: new Color(0.1, 0.4, 0.1),
+			depth: 2
+		});
+
+		Luxe.draw.box({
+			x: -Luxe.screen.width,
+			y: -10,
 			w: Luxe.screen.width * 2,
 			h: 200,
 			color: new Color(0.2, 0.6, 0.1),

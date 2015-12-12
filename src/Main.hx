@@ -28,7 +28,7 @@ class Main extends luxe.Game {
 	}
 
 	function assetsLoaded(_) {
-		Luxe.renderer.clear_color = new luxe.Color(1.0, 0.5, 0.5, 1);
+		Luxe.renderer.clear_color = new luxe.Color(0.5, 0.6, 1.0, 1);
 
 		// set up the VFX
 		effects.onload();

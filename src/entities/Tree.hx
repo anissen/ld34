@@ -8,7 +8,8 @@ import luxe.Color;
 typedef Segment = {
     x :Float,
     y :Float,
-    angle :Float
+    angle :Float,
+    locked :Bool
 };
 
 class Tree extends Entity {
@@ -22,7 +23,7 @@ class Tree extends Entity {
 
     public function new() {
         super({name: "Tree"});
-        segments = [ for (i in 0 ... numSegments) { x: 0, y: 0, angle: 0 } ];
+        segments = [ for (i in 0 ... numSegments) { x: 0, y: 0, angle: 0, locked: false } ];
         var lastSegment = segments[numSegments-1];
         lastSegment.x = 0;
         lastSegment.y = 0;
@@ -64,17 +65,32 @@ class Tree extends Entity {
         var p1 = new Vector(rot_x, rot_y);
 
         var width_increase = (max_width - min_width) / numSegments;
-        // trace((i + 2) * width_increase);
 
         var temp = Vector.Subtract(p1, p0).normalized;
         var tangent = new Vector(-temp.y, temp.x);
 
+        var pt2 = Vector.Multiply(tangent, min_width + (i + 2) * width_increase);
+        var pt3 = Vector.Multiply(tangent, min_width + (i + 1) * width_increase);
+
         var p2 = Vector.Multiply(tangent, min_width + (i + 1) * width_increase);
         var p3 = Vector.Multiply(tangent, min_width + i * width_increase);
-        // var p2 = new Vector(-p0.y, p0.x);
-        // p2.normalize().multiplyScalar(min_width + (i + 1) * width_increase);
-        // var p3 = new Vector(-p1.y, p1.x);
-        // p3.normalize().multiplyScalar(min_width + i * width_increase);
+
+        Luxe.draw.circle({
+            x: seg.x,
+            y: seg.y,
+            r: min_width + (i + 2) * width_increase,
+            color: new Color(1.0, 1.0, 1.0), immediate: true
+        });
+
+        Luxe.draw.poly({
+            points: [
+                Vector.Add(p0, pt2), Vector.Subtract(p0, pt2),
+                Vector.Subtract(p1, pt3), Vector.Add(p1, pt3)
+            ],
+            color: new Color(1.0, 1.0, 1.0),
+            immediate: true
+        });
+
         Luxe.draw.circle({
             x: seg.x,
             y: seg.y,
@@ -95,15 +111,14 @@ class Tree extends Entity {
             ],
             immediate: true
         });
+    }
 
-        // Luxe.draw.line({
-        //     p0: p0,
-        //     p1: p1,
-        //     color0: new Color(0.2, 0, 0.5),
-        //     color1: new Color(0.5, 0, 0.5),
-        //     immediate: true,
-        //     depth: 2
-        // });
-
+    public function lock_segment() {
+        for (s in segments) {
+            if (!s.locked) {
+                s.locked = true;
+                return;
+            }
+        }
     }
 }
