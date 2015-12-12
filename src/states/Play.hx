@@ -6,12 +6,14 @@ import luxe.Vector;
 import luxe.Color;
 
 import entities.Tree;
+import entities.Drop;
 
 class Play extends State {
 	var lastStateScene:Scene;
 	var stateScene:Scene;
 
 	var tree :Tree;
+	var drops :Array<Drop>;
 
 	public function new() {
 		super({ name: 'Play' });
@@ -22,6 +24,8 @@ class Play extends State {
 		Luxe.camera.center = new Vector(0, -Luxe.screen.height / 2 + 50);
 		lastStateScene = Luxe.scene;
 		Luxe.scene = stateScene;
+
+		drops = [];
 
 		new luxe.Sprite({
 			pos: new Vector(0, 0),
@@ -61,9 +65,21 @@ class Play extends State {
 		Luxe.scene = lastStateScene;
 	}
 
+	override public function update(dt :Float) {
+		var pos = tree.get_top();
+		for (drop in drops) {
+			if (Vector.Subtract(drop.pos, pos).length < 30) {
+				Luxe.events.fire('got_drop', { pos: drop.pos.clone() });
+				drop.destroy();
+				drops.remove(drop);
+			}
+		}
+	}
+
 	override public function onkeyup(event :luxe.Input.KeyEvent) {
         switch (event.keycode) {
 			case luxe.Input.Key.key_l: tree.lock_segment();
+		case luxe.Input.Key.key_d: var drop = new Drop(); drop.pos = new Vector(-Luxe.screen.width / 2 + Luxe.screen.width * Math.random(), -Luxe.screen.height); drops.push(drop);
 		}
     }
 }

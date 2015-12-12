@@ -45,6 +45,12 @@ class Main extends luxe.Game {
 		fsm = new States();
 		fsm.add(new states.Play());
 		fsm.set('Play');
+
+		Luxe.events.listen('got_drop', function(data :{ pos :luxe.Vector }) {
+			shockwaveEffect.elapsed_effect_time = 0.0;
+	        shockwaveEffect.effect_time = 3.0;
+	        shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(data.pos);
+		});
 	}
 
 	override function onkeyup( e:KeyEvent ) {
@@ -54,9 +60,7 @@ class Main extends luxe.Game {
 	}
 
     override function onmousedown(e :MouseEvent) {
-        shockwaveEffect.elapsed_effect_time = 0.0;
-        shockwaveEffect.effect_time = 3.0;
-        shockwaveEffect.mouse_pos = e.pos.clone();
+
     }
 
 	override function update(dt:Float) {
