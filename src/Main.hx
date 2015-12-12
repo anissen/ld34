@@ -60,8 +60,8 @@ class Main extends luxe.Game {
 					Luxe.events.fire('got_sun');
 				case Time:
 					sepiaEffect.amount = 1;
-					luxe.tween.Actuate.tween(Luxe, 1, { timescale: 0.05 }).reflect().repeat(1)
-						.ease(luxe.tween.easing.Cubic.easeInOut);
+					Luxe.timescale = 0.2;
+					luxe.tween.Actuate.tween(Luxe, 2, { timescale: 1 }).ease(luxe.tween.easing.Expo.easeInOut);
 			}
 		});
 	}
@@ -78,7 +78,7 @@ class Main extends luxe.Game {
 
 	override function update(dt:Float) {
 		if (bloomEffect != null && bloomEffect.radius > 2) bloomEffect.radius -= dt;
-		if (sepiaEffect != null && sepiaEffect.amount > 0) sepiaEffect.amount -= dt * 0.1;
+		if (sepiaEffect != null && sepiaEffect.amount > 0) sepiaEffect.amount -= dt * 0.2;
 		effects.update(dt);
 	}
 

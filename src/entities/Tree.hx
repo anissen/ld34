@@ -35,9 +35,13 @@ class Tree extends Entity {
 
         Luxe.events.listen('sun_drop', function(drop :Drop) {
             points++;
-            if (points % 10 == 0) {
+            if (points % 3 == 0) {
                 add_segment();
             }
+        });
+
+        Luxe.events.listen('rain_drop', function(drop :Drop) {
+            lock_countdown += 3;
         });
     }
 
@@ -52,10 +56,14 @@ class Tree extends Entity {
         lock_countdown -= dt;
         if (lock_countdown <= 0) {
             if (locked_segments < numSegments) lock_segment();
-            lock_countdown = 10 - numSegments / 5;
+            lock_countdown = get_lock_countdown();
         }
         calc_tree();
         draw_tree();
+    }
+
+    function get_lock_countdown() {
+        return Math.max(4, 20 - numSegments);
     }
 
     function calc_tree() {

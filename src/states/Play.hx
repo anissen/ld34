@@ -81,12 +81,13 @@ class Play extends State {
 			}
 		}
 		pos.x = Luxe.camera.center.x;
+		pos.y = Math.min(pos.y, -Luxe.screen.height / 2 + 100);
 		Luxe.camera.focus(pos, 0.2);
 
 		next_drop -= dt;
 		if (next_drop <= 0) {
 			create_drop();
-			next_drop = 1.5 * Math.random();
+			next_drop = 2 * Math.random();
 		}
 	}
 
