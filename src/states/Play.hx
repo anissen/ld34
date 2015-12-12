@@ -32,7 +32,8 @@ class Play extends State {
 			y: 0,
 			w: Luxe.screen.width * 2,
 			h: 200,
-			color: new Color(0.2, 0.6, 0.1)
+			color: new Color(0.2, 0.6, 0.1),
+			depth: 2
 		});
 		// Luxe.draw.circle({ x: 100, y: 100, r: 100, color: new luxe.Color(1, 0, 0.5) });
 		// Luxe.draw.circle({ x: 120, y: 120, r: 40, color: new luxe.Color(0, 1, 0.5) });

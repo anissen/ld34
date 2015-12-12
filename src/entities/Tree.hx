@@ -79,7 +79,7 @@ class Tree extends Entity {
             x: seg.x,
             y: seg.y,
             r: min_width + (i + 1) * width_increase,
-            color: new Color(i / numSegments, 0.5 - (i / numSegments) * 0.5, 0.0), immediate: true
+            color: new Color((i + 1) / numSegments, 0.5 - ((i + 1) / numSegments) * 0.5, 0.0), immediate: true
         });
 
         Luxe.draw.poly({
@@ -87,7 +87,12 @@ class Tree extends Entity {
                 Vector.Add(p0, p2), Vector.Subtract(p0, p2),
                 Vector.Subtract(p1, p3), Vector.Add(p1, p3)
             ],
-            color: new Color(i / numSegments, 0.5 - (i / numSegments) * 0.5, 0.0), //new Color(0.5, 0, 0.2),
+            colors: [
+                new Color((i + 1) / numSegments, 0.5 - ((i + 1) / numSegments) * 0.5, 0.0),
+                new Color((i + 1) / numSegments, 0.5 - ((i + 1) / numSegments) * 0.5, 0.0),
+                new Color(i / numSegments, 0.5 - (i / numSegments) * 0.5, 0.0),
+                new Color(i / numSegments, 0.5 - (i / numSegments) * 0.5, 0.0)
+            ],
             immediate: true
         });
 
