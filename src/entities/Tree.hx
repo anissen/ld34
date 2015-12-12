@@ -20,6 +20,7 @@ class Tree extends Entity {
     var locked_segments :Int = 0;
     var target :Vector;
     var points :Int = 0;
+    var lock_countdown :Float;
 
     public function new() {
         super({name: "Tree"});
@@ -27,6 +28,8 @@ class Tree extends Entity {
         var lastSegment = segments[numSegments-1];
         lastSegment.x = 0;
         lastSegment.y = 0;
+
+        lock_countdown = 10;
 
         Luxe.events.listen('got_drop', function(data :{ pos :luxe.Vector }) {
             points++;
@@ -39,12 +42,22 @@ class Tree extends Entity {
     function add_segment() {
         trace('add_segment');
         numSegments++;
-        var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        segments.push({ x: pos.x, y: pos.y, angle: 0 });
-        // lock_segment();
+        // var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
+        segments.unshift({ x: 0, y: 0, angle: 0 });
+        calc_tree();
     }
 
     override public function update(dt :Float) {
+        lock_countdown -= dt;
+        if (lock_countdown <= 0) {
+            if (locked_segments < numSegments) lock_segment();
+            lock_countdown = 10;
+        }
+        calc_tree();
+        draw_tree();
+    }
+
+    function calc_tree() {
         target = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
         for (i in 0 ... numSegments - locked_segments) {
             reach_segment(segments[i]);
@@ -53,14 +66,17 @@ class Tree extends Entity {
             var index = numSegments - i;
             position_segment(segments[index], segments[index-1]);
         }
-        var top = get_top();
-        Luxe.draw.circle({
-            x: top.x,
-            y: top.y,
-            r: 30,
-            color: new Color(1, 1, 1, 0.2),
-            immediate: true
-        });
+    }
+
+    function draw_tree() {
+        // var top = get_top();
+        // Luxe.draw.circle({
+        //     x: top.x,
+        //     y: top.y,
+        //     r: 30,
+        //     color: new Color(1, 1, 1, 0.2),
+        //     immediate: true
+        // });
         for (i in 0 ... numSegments) {
             draw_segment(segments[i], i);
         }
@@ -91,28 +107,30 @@ class Tree extends Entity {
         var temp = Vector.Subtract(p1, p0).normalized;
         var tangent = new Vector(-temp.y, temp.x);
 
-        var pt2 = Vector.Multiply(tangent, min_width + (i + 2) * width_increase);
-        var pt3 = Vector.Multiply(tangent, min_width + (i + 1) * width_increase);
+        if (i < numSegments - locked_segments) { // draw outline
+            var pt2 = Vector.Multiply(tangent, min_width + (i + 2) * width_increase);
+            var pt3 = Vector.Multiply(tangent, min_width + (i + 1) * width_increase);
+
+            Luxe.draw.circle({
+                x: seg.x,
+                y: seg.y,
+                r: min_width + (i + 2) * width_increase,
+                color: new Color(1.0, 1.0, 1.0),
+                immediate: true
+            });
+
+            Luxe.draw.poly({
+                points: [
+                    Vector.Add(p0, pt2), Vector.Subtract(p0, pt2),
+                    Vector.Subtract(p1, pt3), Vector.Add(p1, pt3)
+                ],
+                color: new Color(1.0, 1.0, 1.0),
+                immediate: true
+            });
+        }
 
         var p2 = Vector.Multiply(tangent, min_width + (i + 1) * width_increase);
         var p3 = Vector.Multiply(tangent, min_width + i * width_increase);
-
-        Luxe.draw.circle({
-            x: seg.x,
-            y: seg.y,
-            r: min_width + (i + 2) * width_increase,
-            color: new Color(1.0, 1.0, 1.0),
-            immediate: true
-        });
-
-        Luxe.draw.poly({
-            points: [
-                Vector.Add(p0, pt2), Vector.Subtract(p0, pt2),
-                Vector.Subtract(p1, pt3), Vector.Add(p1, pt3)
-            ],
-            color: new Color(1.0, 1.0, 1.0),
-            immediate: true
-        });
 
         Luxe.draw.circle({
             x: seg.x,

@@ -71,6 +71,8 @@ class Play extends State {
 				drops.remove(drop);
 			}
 		}
+		pos.x = Luxe.camera.center.x;
+		Luxe.camera.focus(pos, 0.2);
 	}
 
 	override public function onkeyup(event :luxe.Input.KeyEvent) {
