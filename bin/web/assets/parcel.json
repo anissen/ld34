@@ -1,0 +1,19 @@
+{
+    "shaders" : [
+        { "id": "circleout", "frag_id": "assets/shaders/circleout.glsl", "vert_id": "default" },
+        { "id": "sepia", "frag_id": "assets/shaders/sepia.glsl", "vert_id": "default" },
+        { "id": "vignette", "frag_id": "assets/shaders/vignette.glsl", "vert_id": "default" },
+        { "id": "glitch", "frag_id": "assets/shaders/glitch.glsl", "vert_id": "default" },
+        { "id": "isolate_bright", "frag_id": "assets/shaders/isolate_bright.glsl", "vert_id": "default" },
+        { "id": "blur", "frag_id": "assets/shaders/blur.glsl", "vert_id": "default" },
+        { "id": "shockwave", "frag_id": "assets/shaders/shockwave.glsl", "vert_id": "default" }
+    ],
+    "textures": [
+        { "id": "assets/backgrounds/summer.png" },
+        { "id": "assets/backgrounds/montains.png" },
+        { "id": "assets/backgrounds/grass.png" },
+        { "id": "assets/sprites/sun.png" },
+        { "id": "assets/sprites/rain.png" },
+        { "id": "assets/sprites/hourglass.png" }
+    ]
+}
