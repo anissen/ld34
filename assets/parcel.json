@@ -9,6 +9,10 @@
         { "id": "shockwave", "frag_id": "assets/shaders/shockwave.glsl", "vert_id": "default" }
     ],
     "textures": [
-        { "id": "assets/backgrounds/summer.png" }
+        { "id": "assets/backgrounds/summer.png" },
+        { "id": "assets/backgrounds/montains.png" },
+        { "id": "assets/backgrounds/grass.png" },
+        { "id": "assets/sprites/sun.png" },
+        { "id": "assets/sprites/rain.png" }
     ]
 }

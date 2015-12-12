@@ -12,9 +12,9 @@ typedef Segment = {
 };
 
 class Tree extends Entity {
-    var numSegments :Int = 8;
+    var numSegments :Int = 5;
     var segments :Array<Segment>;
-    var segLength :Float = 40;
+    var segLength :Float = 50;
     var max_width :Float = 20;
     var min_width :Float = 1;
     var locked_segments :Int = 0;
