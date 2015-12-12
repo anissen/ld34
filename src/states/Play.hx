@@ -77,6 +77,9 @@ class Play extends State {
 
 		var pos = tree.get_top();
 		for (drop in drops) {
+			if (drop.dropType == Poison && drop.pos.y < pos.y) {
+				drop.pos.x += Vector.Subtract(pos, drop.pos).normalized.multiplyScalar(dt * 100).x;
+			}
 			if (Vector.Subtract(drop.pos, pos).length < 30) {
 				Luxe.events.fire('got_drop', drop);
 				drop.destroy();

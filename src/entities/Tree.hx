@@ -47,6 +47,7 @@ class Tree extends Entity {
         });
 
         Luxe.events.listen('got_poison', function(drop :Drop) {
+            lock_segment();
             remove_segment();
         });
     }
