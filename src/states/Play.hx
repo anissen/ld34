@@ -53,6 +53,10 @@ class Play extends State {
 		Luxe.events.listen('got_sun', function(_) {
             tree.highlight = 1.0;
         });
+
+		Luxe.events.listen('got_poison', function(_) {
+            tree.poison = 1.0;
+        });
 	}
 
 	override function onrender() {
@@ -68,6 +72,8 @@ class Play extends State {
 	override public function update(dt :Float) {
 		if (tree.highlight > 0) tree.highlight -= dt * 1.5;
 		if (tree.highlight < 0) tree.highlight = 0;
+		if (tree.poison > 0) tree.poison -= dt * 1.5;
+		if (tree.poison < 0) tree.poison = 0;
 
 		var pos = tree.get_top();
 		for (drop in drops) {
@@ -88,17 +94,19 @@ class Play extends State {
 		}
 	}
 
-	override public function onkeyup(event :luxe.Input.KeyEvent) {
-        switch (event.keycode) {
-			case luxe.Input.Key.key_l: tree.lock_segment();
-			case luxe.Input.Key.key_d: create_drop();
-		}
-    }
+	// override public function onkeyup(event :luxe.Input.KeyEvent) {
+    //     switch (event.keycode) {
+	// 		case luxe.Input.Key.key_l: tree.lock_segment();
+	// 		case luxe.Input.Key.key_d: create_drop();
+	// 	}
+    // }
 
 	function create_drop() {
 		var random = Math.random();
 		var drop = if (random < 0.1) {
 			new TimeDrop();
+		} else if (random < 0.2) {
+			new PoisonDrop();
 		} else if (random < 0.3) {
 			new RainDrop();
 		} else {

@@ -22,7 +22,7 @@ class Tree extends Entity {
     var points :Int = 0;
     var lock_countdown :Float;
     public var highlight :Float;
-
+    public var poison :Float;
 
     public function new() {
         super({name: "Tree"});
@@ -33,6 +33,7 @@ class Tree extends Entity {
 
         lock_countdown = 10;
         highlight = 0.0;
+        poison = 0.0;
 
         Luxe.events.listen('got_sun', function(drop :Drop) {
             points++;
@@ -44,13 +45,23 @@ class Tree extends Entity {
         Luxe.events.listen('got_rain', function(drop :Drop) {
             lock_countdown += 3;
         });
+
+        Luxe.events.listen('got_poison', function(drop :Drop) {
+            remove_segment();
+        });
     }
 
     function add_segment() {
         numSegments++;
-        // var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
         segments.unshift({ x: 0, y: 0, angle: 0 });
         max_width++;
+        calc_tree();
+    }
+
+    function remove_segment() {
+        numSegments--;
+        segments.shift();
+        max_width--;
         calc_tree();
     }
 
@@ -175,7 +186,8 @@ class Tree extends Entity {
 
     function get_color(i :Int) {
         var highlight_value = highlight * 0.5 - (i / numSegments) * 0.5;
-        return new Color(highlight_value, 0.6 - (i / numSegments) * 0.4, highlight_value);
+        var poison_value = poison * 0.5 - (i / numSegments) * 0.5;
+        return new Color(poison_value, 0.6 - (i / numSegments) * 0.4, highlight_value);
     }
 
     public function lock_segment() :Void {
