@@ -92,7 +92,7 @@ class Play extends State {
 			if (intro_number > screen_winter) return;
 
 			// overlay.color.tween(2, { a: 0 }, true);
-			if (intro_number >= screen_spring && intro_number <= screen_winter) time_left = 20;
+			if (intro_number >= screen_spring && intro_number <= screen_winter) time_left = 40;
 		});
 	}
 
@@ -136,6 +136,7 @@ class Play extends State {
 
 		var pos = tree.get_top();
 		for (drop in drops) {
+			drop.move(dt);
 			if (drop.dropType == Poison) {
 				drop.pos.x += Vector.Subtract(pos, drop.pos).normalized.multiplyScalar(dt * 70).x;
 			}
@@ -158,28 +159,29 @@ class Play extends State {
 		}
 	}
 
-	// override public function onkeyup(event :luxe.Input.KeyEvent) {
-    //     switch (event.keycode) {
-	// 		case luxe.Input.Key.key_l: tree.lock_segment();
-	// 		case luxe.Input.Key.key_d: create_drop();
-	// 	}
-    // }
+	override public function onkeyup(event :luxe.Input.KeyEvent) {
+        switch (event.keycode) {
+			case luxe.Input.Key.key_l: tree.lock_segment();
+			case luxe.Input.Key.key_d: create_drop();
+			case luxe.Input.Key.key_n: time_left = 0;
+		}
+    }
 
-	function get_drop(random :Float) {
-		trace(intro_number);
+	function get_drop(random :Float) :Drop {
 		if (intro_number == screen_spring) { // spring
-			return (random < 0.4 ? new RainDrop() : new SunDrop());
+			if (random < 0.1) return new PoisonDrop();
+			return (random < 0.5 ? new RainDrop() : new SunDrop());
 		} else if (intro_number == screen_summer) { // summer
-			if (random < 0.1) return new PoisonDrop();
-			return (random < 0.4 ? new RainDrop() : new SunDrop());
-		} else if (intro_number == screen_fall) { // fall
-			if (random < 0.1) return new PoisonDrop();
-			if (random < 0.2) return new TimeDrop();
-			return (random < 0.4 ? new RainDrop() : new SunDrop());
-		} else if (intro_number == screen_winter) { // winter
 			if (random < 0.2) return new PoisonDrop();
-			if (random < 0.3) return new TimeDrop();
-			return (random < 0.4 ? new RainDrop() : new SunDrop());
+			return (random < 0.5 ? new RainDrop() : new SunDrop());
+		} else if (intro_number == screen_fall) { // fall
+			if (random < 0.3) return new PoisonDrop();
+			if (random < 0.4) return new TimeDrop();
+			return (random < 0.6 ? new RainDrop() : new SunDrop());
+		} else if (intro_number == screen_winter) { // winter
+			if (random < 0.4) return new PoisonDrop();
+			if (random < 0.5) return new TimeDrop();
+			return (random < 0.7 ? new RainDrop() : new SunDrop());
 		} else {
 			return new SunDrop();
 		}

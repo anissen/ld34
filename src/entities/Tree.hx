@@ -4,6 +4,7 @@ package entities;
 import luxe.Entity;
 import luxe.Vector;
 import luxe.Color;
+import luxe.Sprite;
 
 typedef Segment = {
     x :Float,
@@ -63,11 +64,11 @@ class Tree extends Entity {
             remove_segment();
         });
 
-        Luxe.events.listen('start_into', function(_) {
+        Luxe.events.listen('start_intro', function(_) {
             intro = true;
         });
 
-        Luxe.events.listen('end_into', function(_) {
+        Luxe.events.listen('end_intro', function(_) {
             intro = false;
         });
     }
@@ -80,6 +81,7 @@ class Tree extends Entity {
     }
 
     function remove_segment() {
+        if (locked_segments >= segments.length) return;
         numSegments--;
         segments.shift();
         max_width--;
@@ -95,7 +97,7 @@ class Tree extends Entity {
             cursor = Luxe.screen.cursor.pos.clone();
         }
 
-        move_speed = Math.max(move_speed - dt * 20, 100);
+        move_speed = Math.max(move_speed - dt * 15, 100);
         var cursorDiff = Vector.Subtract(Luxe.screen.cursor.pos, cursor);
         if (cursorDiff.length > 10) {
             cursor = Vector.Add(cursor, cursorDiff.normalized.multiplyScalar(dt * move_speed));
@@ -230,8 +232,19 @@ class Tree extends Entity {
     }
 
     public function lock_segment() :Void {
+        if (locked_segments > segments.length) return;
         locked_segments++;
-        // rigidness -= 0.1;
+
+        var locked = segments[segments.length - locked_segments];
+        var next = segments[segments.length - locked_segments - 1];
+        var angle = (locked.angle + (next != null ? next.angle : locked.angle)) / 2;
+        var rnd = Math.random();
+        new Sprite({
+            pos: new Vector(locked.x, locked.y),
+            texture: Luxe.resources.texture('assets/sprites/leafs.png'),
+            scale: new Vector(0.7 + 0.4 * rnd, 0.7 + 0.4 * rnd),
+            rotation_z: (angle + Math.PI / 2) * luxe.utils.Maths._180_OVER_PI
+        });
     }
 
     public function get_top() :Vector {

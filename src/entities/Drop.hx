@@ -21,20 +21,9 @@ class Drop extends Sprite {
         super(options);
     }
 
-    override public function update(dt :Float) {
+    public function move(dt :Float) {
         pos.y += dt * dropSpeed;
         pos.x += dt * (-10 + 20 * Math.random());
-
-        // TODO: Tween this
-
-        // Luxe.draw.circle({
-        //     x: pos.x,
-        //     y: pos.y,
-        //     r: 10,
-        //     color: new Color(1, 1, 0),
-        //     depth: 1,
-        //     immediate: true
-        // });
     }
 }
 

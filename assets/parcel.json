@@ -22,7 +22,8 @@
         { "id": "assets/sprites/sun.png" },
         { "id": "assets/sprites/rain.png" },
         { "id": "assets/sprites/hourglass.png" },
-        { "id": "assets/sprites/poison.png" }
+        { "id": "assets/sprites/poison.png" },
+        { "id": "assets/sprites/leafs.png" }
     ],
     "sounds" : [
         { "id" : "assets/music/background.ogg", "name" : "background", "is_stream" : true },
