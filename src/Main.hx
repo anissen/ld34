@@ -69,8 +69,8 @@ class Main extends luxe.Game {
 					Luxe.events.fire('got_sun');
 				case Time:
 					sepiaEffect.amount = 0.8;
-					Luxe.timescale = 0.2;
-					luxe.tween.Actuate.tween(Luxe, 2, { timescale: 1 }).ease(luxe.tween.easing.Expo.easeInOut);
+					Luxe.timescale = 0.3;
+					luxe.tween.Actuate.tween(Luxe, 3, { timescale: 1 }); //.ease(luxe.tween.easing.Expo.easeInOut);
 					Luxe.events.fire('got_time');
 				case Poison:
 					Luxe.events.fire('got_poison');

@@ -79,11 +79,13 @@ class Tree extends Entity {
     override public function update(dt :Float) {
         move_speed = Math.max(move_speed - dt * 20, 100);
         var cursorDiff = Vector.Subtract(Luxe.screen.cursor.pos, cursor);
-        if (cursorDiff.length > 5) {
+        if (cursorDiff.length > 10) {
             cursor = Vector.Add(cursor, cursorDiff.normalized.multiplyScalar(dt * move_speed));
+        } else {
+            cursor = Vector.Add(cursor, cursorDiff.normalized.multiplyScalar(dt * move_speed * 0.1));
         }
-        trace('move_speed: ' + move_speed);
-        trace('cursor: ' + cursor);
+        // trace('move_speed: ' + move_speed);
+        // trace('cursor: ' + cursor);
         lock_countdown -= dt;
         if (lock_countdown <= 0) {
             if (locked_segments < numSegments) lock_segment();
