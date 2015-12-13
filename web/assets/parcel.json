@@ -1,0 +1,39 @@
+{
+    "shaders" : [
+        { "id": "sepia", "frag_id": "assets/shaders/sepia.glsl", "vert_id": "default" },
+        { "id": "vignette", "frag_id": "assets/shaders/vignette.glsl", "vert_id": "default" },
+        { "id": "isolate_bright", "frag_id": "assets/shaders/isolate_bright.glsl", "vert_id": "default" },
+        { "id": "blur", "frag_id": "assets/shaders/blur.glsl", "vert_id": "default" },
+        { "id": "shockwave", "frag_id": "assets/shaders/shockwave.glsl", "vert_id": "default" }
+    ],
+    "textures": [
+        { "id": "assets/backgrounds/title.png" },
+        { "id": "assets/backgrounds/instructions.png" },
+        { "id": "assets/backgrounds/spring_intro.png" },
+        { "id": "assets/backgrounds/summer_intro.png" },
+        { "id": "assets/backgrounds/fall_intro.png" },
+        { "id": "assets/backgrounds/winter_intro.png" },
+        { "id": "assets/backgrounds/spring_intro2.png" },
+        { "id": "assets/backgrounds/spring_intro3.png" },
+        { "id": "assets/backgrounds/spring_intro4.png" },
+        { "id": "assets/backgrounds/spring.png" },
+        { "id": "assets/backgrounds/summer.png" },
+        { "id": "assets/backgrounds/fall.png" },
+        { "id": "assets/backgrounds/winter.png" },
+        { "id": "assets/backgrounds/montains.png" },
+        { "id": "assets/backgrounds/grass.png" },
+        { "id": "assets/sprites/sun.png" },
+        { "id": "assets/sprites/rain.png" },
+        { "id": "assets/sprites/hourglass.png" },
+        { "id": "assets/sprites/poison.png" },
+        { "id": "assets/sprites/leafs.png" }
+    ],
+    "sounds" : [
+        { "id" : "assets/music/background.ogg", "name" : "background", "is_stream" : true },
+        { "id" : "assets/sounds/ping.ogg", "name" : "ping", "is_stream" : false },
+        { "id" : "assets/sounds/sun.ogg", "name" : "sun", "is_stream" : false },
+        { "id" : "assets/sounds/rain.ogg", "name" : "rain", "is_stream" : false },
+        { "id" : "assets/sounds/time.ogg", "name" : "time", "is_stream" : false },
+        { "id" : "assets/sounds/poison.ogg", "name" : "poison", "is_stream" : false }
+    ]
+}

@@ -179,13 +179,13 @@ class Play extends State {
 		}
 	}
 
-	override public function onkeyup(event :luxe.Input.KeyEvent) {
-        switch (event.keycode) {
-			case luxe.Input.Key.key_l: tree.lock_segment();
-			case luxe.Input.Key.key_d: create_drop();
-			case luxe.Input.Key.key_n: time_left = 0;
-		}
-    }
+	// override public function onkeyup(event :luxe.Input.KeyEvent) {
+    //     switch (event.keycode) {
+	// 		case luxe.Input.Key.key_l: tree.lock_segment();
+	// 		case luxe.Input.Key.key_d: create_drop();
+	// 		case luxe.Input.Key.key_n: time_left = 0;
+	// 	}
+    // }
 
 	function get_drop(random :Float) :Drop {
 		if (intro_number == screen_spring) { // spring
