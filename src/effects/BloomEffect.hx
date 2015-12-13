@@ -27,6 +27,8 @@ class BloomEffect extends Effect {
 	@:isVar public var threshold(default, set):Float;
 	@:isVar public var radius(default, set):Float;
 
+	// public var enabled :Bool = true;
+
 	function set_threshold(_t:Float) {
 		if(bloomBrightShader != null) {
 			bloomBrightShader.set_float('brightPassThreshold', _t);

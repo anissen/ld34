@@ -12,6 +12,7 @@ class Main extends luxe.Game {
     var bloomEffect :BloomEffect;
 	var shockwaveEffect :ShockwaveEffect;
 	var sepiaEffect :SepiaEffect;
+	var effectsEnabled :Bool = false;
 
     override function config(config:luxe.AppConfig) {
         config.preload.jsons.push({ id: 'assets/parcel.json' });
@@ -45,7 +46,15 @@ class Main extends luxe.Game {
 		effects.addEffect(new VignetteEffect());
 
 		Luxe.events.listen('start_intro', function(_) {
-			bloomEffect.radius = 0.5;
+			fsm.enable('Intro', Luxe.resources.texture('assets/backgrounds/spring_intro.png'));
+			effectsEnabled = false;
+		});
+
+		Luxe.events.listen('end_intro', function(_) {
+			if (fsm.enabled('Intro')) {
+				fsm.disable('Intro');
+			}
+			effectsEnabled = true;
 		});
 
 		Luxe.events.listen('got_drop', function(drop :entities.Drop) {
@@ -70,14 +79,15 @@ class Main extends luxe.Game {
 		// set up the state machine
 		fsm = new States();
 		fsm.add(new states.Play());
+		fsm.add(new states.Intro());
 		fsm.set('Play');
 	}
 
-	override function onkeyup( e:KeyEvent ) {
-		if(e.keycode == Key.escape) {
-			Luxe.shutdown();
-		}
-	}
+	// override function onkeyup( e:KeyEvent ) {
+	// 	if(e.keycode == Key.escape) {
+	// 		Luxe.shutdown();
+	// 	}
+	// }
 
     override function onmousedown(e :MouseEvent) {
 
@@ -90,10 +100,10 @@ class Main extends luxe.Game {
 	}
 
 	override function onprerender() {
-		effects.onprerender();
+		if (effectsEnabled) effects.onprerender();
 	}
 
 	override function onpostrender() {
-		effects.onpostrender();
+		if (effectsEnabled) effects.onpostrender();
 	}
 }

@@ -69,37 +69,42 @@ class Play extends State {
 			pos: Luxe.camera.center,
             name: 'overlay',
             centered: true,
-            size: Luxe.screen.size.clone().multiplyScalar(2),
-            color: new Color(1,1,0.5,0),
+            size: Luxe.screen.size.clone().multiplyScalar(4),
+            color: new Color(0,0,0,1),
             depth: 10
         });
 
-		overlay.color.tween(2, { a: 0.95 }).delay(0.5);
+		Luxe.events.listen('end_intro', function(_) {
+			overlay.color.tween(1, { a: 0 });
+			intro = false;
+		});
 
 		spring_intro();
 	}
 
 	function spring_intro() {
 		intro = true;
+		overlay.color.tween(2, { a: 1 });
 		Luxe.events.fire('start_intro', null);
-        headingText = new luxe.Text({
-	        pos: Vector.Subtract(Luxe.camera.center, new Vector(0, Luxe.screen.height / 3)),
-	        point_size: 96,
-	        depth: 13,
-	        align: luxe.Text.TextAlign.center,
-	        font: Luxe.resources.font('assets/montez/montez.fnt'),
-	        text: '-Spring-',
-	        color: new Color(0,0,0,1) //.rgb(0x242424)
-        });
-		headingText = new luxe.Text({
-	        pos: Luxe.camera.center,
-	        point_size: 48,
-	        depth: 13,
-	        align: luxe.Text.TextAlign.center,
-	        font: Luxe.resources.font('assets/montez/montez.fnt'),
-	        text: 'The first day\nthat she planted it,\nwas just a twig',
-	        color: new Color(0,0,0,1).rgb(0x242424)
-        });
+
+        // headingText = new luxe.Text({
+	    //     pos: Vector.Subtract(Luxe.camera.center, new Vector(0, Luxe.screen.height / 3)),
+	    //     point_size: 96,
+	    //     depth: 13,
+	    //     align: luxe.Text.TextAlign.center,
+	    //     font: Luxe.resources.font('assets/montez/montez.fnt'),
+	    //     text: '-Spring-',
+	    //     color: new Color(0,0,0,1) //.rgb(0x242424)
+        // });
+		// headingText = new luxe.Text({
+	    //     pos: Luxe.camera.center,
+	    //     point_size: 48,
+	    //     depth: 13,
+	    //     align: luxe.Text.TextAlign.center,
+	    //     font: Luxe.resources.font('assets/montez/montez.fnt'),
+	    //     text: 'The first day\nthat she planted it,\nwas just a twig',
+	    //     color: new Color(0,0,0,1).rgb(0x242424)
+        // });
 	}
 
 	override function onrender() {
@@ -131,9 +136,11 @@ class Play extends State {
 				drops.remove(drop);
 			}
 		}
-		pos.x = Luxe.camera.center.x;
-		pos.y = Math.min(pos.y, -Luxe.screen.height / 2 + 100);
-		Luxe.camera.focus(pos, 0.2);
+		if (!intro) {
+			pos.x = Luxe.camera.center.x;
+			pos.y = Math.min(pos.y, -Luxe.screen.height / 2 + 100);
+			Luxe.camera.focus(pos, 0.2);
+		}
 
 		next_drop -= dt;
 		if (next_drop <= 0) {

@@ -12,7 +12,7 @@ import entities.Drop;
 
 class Intro extends State {
 	// var lastStateScene:Scene;
-	var stateScene:Scene;
+	var stateScene :Scene;
 
 	var overlay :Sprite;
 
@@ -21,18 +21,19 @@ class Intro extends State {
 		stateScene = new Scene('Intro');
 	}
 
-	override function onenter<T>(data :T) {
+	override function onenabled<T>(data :T) {
 		// lastStateScene = Luxe.scene;
 		// Luxe.scene = stateScene;
+		// Luxe.camera.center = new Vector();
 
 		overlay = new Sprite({
 			pos: Luxe.camera.center,
             name: 'overlay',
             centered: true,
-            // size: Luxe.screen.size, //clone().multiplyScalar(2),
+            // size: Luxe.screen.size.clone().multiplyScalar(1.1),
             color: new Color(1,1,1,0),
 			texture: cast data,
-            depth: 10,
+            depth: 100,
 			scene: stateScene
         });
 
@@ -42,12 +43,22 @@ class Intro extends State {
 	}
 
 	function spring_intro() {
-		intro = true;
-		Luxe.events.fire('start_intro', null);
+		// intro = true;
+		// Luxe.events.fire('start_intro', null);
 	}
 
-	override function onleave<T>(_:T) {
-		stateScene.empty();
+	override function onkeyup(event :luxe.Input.KeyEvent) {
+		Luxe.events.fire('end_intro', null);
+	}
+
+	override function onmouseup(event :luxe.Input.MouseEvent) {
+		Luxe.events.fire('end_intro', null);
+	}
+
+	override function ondisabled<T>(_:T) {
+		overlay.color.tween(2, { a: 0 }).onComplete(function(_) {
+			stateScene.empty();
+		});
 		// Luxe.scene = lastStateScene;
 	}
 }
