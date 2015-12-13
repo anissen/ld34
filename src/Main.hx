@@ -45,8 +45,18 @@ class Main extends luxe.Game {
 		effects.addEffect(sepiaEffect);
 		effects.addEffect(new VignetteEffect());
 
-		Luxe.events.listen('start_intro', function(_) {
-			fsm.enable('Intro', Luxe.resources.texture('assets/backgrounds/spring_intro.png'));
+		var intro_screens = [
+			Luxe.resources.texture('assets/backgrounds/spring_intro.png'),
+			Luxe.resources.texture('assets/backgrounds/summer_intro.png'),
+			Luxe.resources.texture('assets/backgrounds/fall_intro.png'),
+			Luxe.resources.texture('assets/backgrounds/winter_intro.png'),
+			Luxe.resources.texture('assets/backgrounds/spring2_intro.png'),
+			Luxe.resources.texture('assets/backgrounds/spring3_intro.png')
+		];
+
+		Luxe.events.listen('start_intro', function(index :Int) {
+			trace('start_intro: $index');
+			fsm.enable('Intro', intro_screens[index]);
 			effectsEnabled = false;
 		});
 

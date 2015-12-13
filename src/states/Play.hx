@@ -19,9 +19,9 @@ class Play extends State {
 	var next_drop :Float;
 
 	var overlay :Sprite;
-	var headingText :Text;
-	var introText :Text;
 	var intro :Bool;
+	var intro_number :Int = 0;
+	var time_left :Float = 0;
 
 	public function new() {
 		super({ name: 'Play' });
@@ -75,36 +75,10 @@ class Play extends State {
         });
 
 		Luxe.events.listen('end_intro', function(_) {
-			overlay.color.tween(1, { a: 0 });
+			overlay.color.tween(2, { a: 0 });
+			time_left = 30;
 			intro = false;
 		});
-
-		spring_intro();
-	}
-
-	function spring_intro() {
-		intro = true;
-		overlay.color.tween(2, { a: 1 });
-		Luxe.events.fire('start_intro', null);
-
-        // headingText = new luxe.Text({
-	    //     pos: Vector.Subtract(Luxe.camera.center, new Vector(0, Luxe.screen.height / 3)),
-	    //     point_size: 96,
-	    //     depth: 13,
-	    //     align: luxe.Text.TextAlign.center,
-	    //     font: Luxe.resources.font('assets/montez/montez.fnt'),
-	    //     text: '-Spring-',
-	    //     color: new Color(0,0,0,1) //.rgb(0x242424)
-        // });
-		// headingText = new luxe.Text({
-	    //     pos: Luxe.camera.center,
-	    //     point_size: 48,
-	    //     depth: 13,
-	    //     align: luxe.Text.TextAlign.center,
-	    //     font: Luxe.resources.font('assets/montez/montez.fnt'),
-	    //     text: 'The first day\nthat she planted it,\nwas just a twig',
-	    //     color: new Color(0,0,0,1).rgb(0x242424)
-        // });
 	}
 
 	override function onrender() {
@@ -117,7 +91,20 @@ class Play extends State {
 		Luxe.scene = lastStateScene;
 	}
 
+	function start_intro() {
+		intro = true;
+		overlay.color.tween(2, { a: 1 });
+		Luxe.events.fire('start_intro', intro_number);
+		intro_number++;
+	}
+
 	override public function update(dt :Float) {
+		time_left -= dt;
+		if (!intro && time_left <= 0) {
+			start_intro();
+			return;
+		}
+
 		if (intro) dt = 0;
 
 		if (tree.highlight > 0) tree.highlight -= dt * 1.5;

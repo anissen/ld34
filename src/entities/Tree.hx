@@ -24,11 +24,14 @@ class Tree extends Entity {
     public var highlight :Float;
     public var poison :Float;
     var move_speed :Float;
+    var intro :Bool = false;
 
-    var cursor :Vector = new Vector();
+    var cursor :Vector;
 
     public function new() {
         super({name: "Tree"});
+
+        cursor = new Vector();
         segments = [ for (i in 0 ... numSegments) { x: 0, y: 0, angle: 0 } ];
         var lastSegment = segments[numSegments-1];
         lastSegment.x = 0;
@@ -59,6 +62,14 @@ class Tree extends Entity {
             remove_segment();
         });
 
+        Luxe.events.listen('start_into', function(_) {
+            intro = true;
+        });
+
+        Luxe.events.listen('end_into', function(_) {
+            intro = false;
+        });
+
         move_speed = 1000;
     }
 
@@ -77,6 +88,9 @@ class Tree extends Entity {
     }
 
     override public function update(dt :Float) {
+        if (intro) dt = 0;
+        // if (cursor == null) return;
+
         move_speed = Math.max(move_speed - dt * 20, 100);
         var cursorDiff = Vector.Subtract(Luxe.screen.cursor.pos, cursor);
         if (cursorDiff.length > 10) {
@@ -84,8 +98,6 @@ class Tree extends Entity {
         } else {
             cursor = Vector.Add(cursor, cursorDiff.normalized.multiplyScalar(dt * move_speed * 0.1));
         }
-        // trace('move_speed: ' + move_speed);
-        // trace('cursor: ' + cursor);
         lock_countdown -= dt;
         if (lock_countdown <= 0) {
             if (locked_segments < numSegments) lock_segment();
