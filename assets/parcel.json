@@ -9,10 +9,14 @@
         { "id": "shockwave", "frag_id": "assets/shaders/shockwave.glsl", "vert_id": "default" }
     ],
     "textures": [
+        { "id": "assets/backgrounds/title.png" },
         { "id": "assets/backgrounds/spring_intro.png" },
         { "id": "assets/backgrounds/summer_intro.png" },
         { "id": "assets/backgrounds/fall_intro.png" },
         { "id": "assets/backgrounds/winter_intro.png" },
+        { "id": "assets/backgrounds/spring_intro2.png" },
+        { "id": "assets/backgrounds/spring_intro3.png" },
+        { "id": "assets/backgrounds/spring_intro4.png" },
         { "id": "assets/backgrounds/summer.png" },
         { "id": "assets/backgrounds/montains.png" },
         { "id": "assets/backgrounds/grass.png" },
