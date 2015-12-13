@@ -22,6 +22,7 @@ class Play extends State {
 	var intro :Bool;
 	var intro_number :Int = 0;
 	var time_left :Float = 0;
+	var background :Sprite;
 	// var fade_amount :Float = 1;
 
 	var screen_title = 1;
@@ -47,10 +48,11 @@ class Play extends State {
 		drops = [];
 		next_drop = 0;
 
-		new luxe.Sprite({
-			pos: new Vector(0, 0),
-			texture: Luxe.resources.texture('assets/backgrounds/summer.png'),
+		background = new luxe.Sprite({
+			pos: new Vector(0, 1280),
+			texture: Luxe.resources.texture('assets/backgrounds/spring.png'),
 			scale: new Vector(1.1, 1.1),
+			color: new Color(0, 0, 0, 1),
 			depth: -2
 		});
 
@@ -91,6 +93,13 @@ class Play extends State {
 			intro = false;
 			if (intro_number > screen_winter) return;
 
+			if (intro_number == screen_summer) {
+				background.texture = Luxe.resources.texture('assets/backgrounds/summer.png');
+			} else if (intro_number == screen_fall) {
+				background.texture = Luxe.resources.texture('assets/backgrounds/fall.png');
+			} else if (intro_number == screen_winter) {
+				background.texture = Luxe.resources.texture('assets/backgrounds/winter.png');
+			}
 			// overlay.color.tween(2, { a: 0 }, true);
 			if (intro_number >= screen_spring && intro_number <= screen_winter) time_left = 40;
 		});
@@ -159,13 +168,13 @@ class Play extends State {
 		}
 	}
 
-	override public function onkeyup(event :luxe.Input.KeyEvent) {
-        switch (event.keycode) {
-			case luxe.Input.Key.key_l: tree.lock_segment();
-			case luxe.Input.Key.key_d: create_drop();
-			case luxe.Input.Key.key_n: time_left = 0;
-		}
-    }
+	// override public function onkeyup(event :luxe.Input.KeyEvent) {
+    //     switch (event.keycode) {
+	// 		case luxe.Input.Key.key_l: tree.lock_segment();
+	// 		case luxe.Input.Key.key_d: create_drop();
+	// 		case luxe.Input.Key.key_n: time_left = 0;
+	// 	}
+    // }
 
 	function get_drop(random :Float) :Drop {
 		if (intro_number == screen_spring) { // spring

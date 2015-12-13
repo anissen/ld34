@@ -51,7 +51,7 @@ class Tree extends Entity {
         });
 
         Luxe.events.listen('got_rain', function(drop :Drop) {
-            lock_countdown += 3;
+            lock_countdown += 2;
             move_speed = Math.min(move_speed + 100, 1000);
         });
 
@@ -232,7 +232,7 @@ class Tree extends Entity {
     }
 
     public function lock_segment() :Void {
-        if (locked_segments > segments.length) return;
+        if (locked_segments >= segments.length) return;
         locked_segments++;
 
         var locked = segments[segments.length - locked_segments];
