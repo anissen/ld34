@@ -1,9 +1,7 @@
 {
     "shaders" : [
-        { "id": "circleout", "frag_id": "assets/shaders/circleout.glsl", "vert_id": "default" },
         { "id": "sepia", "frag_id": "assets/shaders/sepia.glsl", "vert_id": "default" },
         { "id": "vignette", "frag_id": "assets/shaders/vignette.glsl", "vert_id": "default" },
-        { "id": "glitch", "frag_id": "assets/shaders/glitch.glsl", "vert_id": "default" },
         { "id": "isolate_bright", "frag_id": "assets/shaders/isolate_bright.glsl", "vert_id": "default" },
         { "id": "blur", "frag_id": "assets/shaders/blur.glsl", "vert_id": "default" },
         { "id": "shockwave", "frag_id": "assets/shaders/shockwave.glsl", "vert_id": "default" }
@@ -26,7 +24,7 @@
         { "id": "assets/sprites/hourglass.png" },
         { "id": "assets/sprites/poison.png" }
     ],
-    "fonts": [
-        { "id": "assets/montez/montez.fnt" }
+    "sounds" : [
+        { "id" : "assets/music/background.ogg", "name" : "background", "is_stream" : true }
     ]
 }

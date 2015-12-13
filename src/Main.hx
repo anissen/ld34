@@ -32,6 +32,10 @@ class Main extends luxe.Game {
 	function assetsLoaded(_) {
 		Luxe.renderer.clear_color = new luxe.Color(0.5, 0.6, 1.0, 1);
 
+		if (Luxe.audio.exists('background')) {
+			Luxe.audio.get('background').loop();
+		}
+
 		// set up the VFX
 		effects.onload();
 
