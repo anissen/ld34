@@ -1,8 +1,8 @@
 
 TODO:
 
-[·] Delayed movement to mouse (to cursor nearing mouse pos)
-[·] Playable from beginning to end
+[x] Delayed movement to mouse (to cursor nearing mouse pos)
+[x] Playable from beginning to end
 [·] Intro and end tiles
 [x] Seasons (+ graphics)
 [·] Music

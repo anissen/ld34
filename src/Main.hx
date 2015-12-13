@@ -47,6 +47,7 @@ class Main extends luxe.Game {
 
 		var intro_screens = [
 			Luxe.resources.texture('assets/backgrounds/title.png'),
+			Luxe.resources.texture('assets/backgrounds/instructions.png'),
 			Luxe.resources.texture('assets/backgrounds/spring_intro.png'),
 			Luxe.resources.texture('assets/backgrounds/summer_intro.png'),
 			Luxe.resources.texture('assets/backgrounds/fall_intro.png'),
@@ -57,8 +58,8 @@ class Main extends luxe.Game {
 		];
 
 		Luxe.events.listen('start_intro', function(index :Int) {
-			if (index >= intro_screens.length) return;
-			fsm.enable('Intro', intro_screens[index]);
+			if (index - 1 >= intro_screens.length) return;
+			fsm.enable('Intro', intro_screens[index - 1]);
 			effectsEnabled = false;
 		});
 
@@ -67,6 +68,7 @@ class Main extends luxe.Game {
 				fsm.disable('Intro');
 			}
 			effectsEnabled = true;
+			this.onrender();
 		});
 
 		Luxe.events.listen('got_drop', function(drop :entities.Drop) {

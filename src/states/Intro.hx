@@ -26,7 +26,7 @@ class Intro extends State {
 	override function onenabled<T>(data :T) {
 		// lastStateScene = Luxe.scene;
 		// Luxe.scene = stateScene;
-		Luxe.camera.center = new Vector();
+		Luxe.camera.center = new Vector(0, -Luxe.screen.height / 2 + 50);
 
 		ending = false;
 
@@ -41,7 +41,7 @@ class Intro extends State {
 			scene: stateScene
         });
 
-		overlay.color.tween(2, { a: 1 });
+		overlay.color.tween(1, { a: 1 });
 	}
 
 	override function onkeyup(event :luxe.Input.KeyEvent) {
@@ -57,12 +57,13 @@ class Intro extends State {
 
 		ending = true;
 		overlay.color.tween(2, { a: 0 }).onComplete(function(_) {
+			stateScene.empty();
 			Luxe.events.fire('end_intro', null);
 		});
 	}
 
 	override function ondisabled<T>(_:T) {
-		stateScene.empty();
+
 		// Luxe.scene = lastStateScene;
 	}
 }

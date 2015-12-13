@@ -10,6 +10,7 @@
     ],
     "textures": [
         { "id": "assets/backgrounds/title.png" },
+        { "id": "assets/backgrounds/instructions.png" },
         { "id": "assets/backgrounds/spring_intro.png" },
         { "id": "assets/backgrounds/summer_intro.png" },
         { "id": "assets/backgrounds/fall_intro.png" },

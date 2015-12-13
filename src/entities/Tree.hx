@@ -87,7 +87,7 @@ class Tree extends Entity {
     }
 
     override public function update(dt :Float) {
-        if (intro) dt = 0.0001;
+        if (intro) dt = 0;
         // if (cursor == null) return;
 
         // untyped __js__("debugger;");

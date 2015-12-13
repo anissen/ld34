@@ -22,6 +22,17 @@ class Play extends State {
 	var intro :Bool;
 	var intro_number :Int = 0;
 	var time_left :Float = 0;
+	// var fade_amount :Float = 1;
+
+	var screen_title = 1;
+	var screen_instructions = 2;
+	var screen_spring = 3;
+	var screen_summer = 4;
+	var screen_fall = 5;
+	var screen_winter = 6;
+	var screen_spring_end1 = 7;
+	var screen_spring_end2 = 8;
+	var screen_spring_end3 = 9;
 
 	public function new() {
 		super({ name: 'Play' });
@@ -70,16 +81,16 @@ class Play extends State {
             name: 'overlay',
             centered: true,
             size: Luxe.screen.size.clone().multiplyScalar(4),
-            color: new Color(0,0,0,1),
+            color: new Color(0.8, 0.6, 0.1, 1),
             depth: 10
         });
 
 		Luxe.events.listen('end_intro', function(_) {
-			if (intro_number >= 8) return;
-
-			overlay.color.tween(2, { a: 0 });
-			if (intro_number > 1) time_left = 30;
 			intro = false;
+			if (intro_number > screen_winter) return;
+
+			// overlay.color.tween(2, { a: 0 }, true);
+			if (intro_number >= screen_spring && intro_number <= screen_winter) time_left = 5;
 		});
 	}
 
@@ -94,10 +105,11 @@ class Play extends State {
 	}
 
 	function start_intro() {
-		intro = true;
-		overlay.color.tween(2, { a: 1 });
-		Luxe.events.fire('start_intro', intro_number);
+		if (intro_number == screen_spring_end3) return;
 		intro_number++;
+		intro = true;
+		//overlay.color.tween(2, { a: 1 }, true);
+		Luxe.events.fire('start_intro', intro_number);
 	}
 
 	override public function update(dt :Float) {
@@ -105,6 +117,12 @@ class Play extends State {
 		if (!intro && time_left <= 0) {
 			start_intro();
 			return;
+		}
+
+		if (intro) {
+			overlay.color.a = Math.min(overlay.color.a + dt, 1);
+		} else {
+			overlay.color.a = Math.max(overlay.color.a - dt, 0);
 		}
 
 		if (intro) dt = 0;
@@ -116,8 +134,8 @@ class Play extends State {
 
 		var pos = tree.get_top();
 		for (drop in drops) {
-			if (drop.dropType == Poison && drop.pos.y < pos.y) {
-				drop.pos.x += Vector.Subtract(pos, drop.pos).normalized.multiplyScalar(dt * 60).x;
+			if (drop.dropType == Poison) {
+				drop.pos.x += Vector.Subtract(pos, drop.pos).normalized.multiplyScalar(dt * 70).x;
 			}
 			if (Vector.Subtract(drop.pos, pos).length < 30) {
 				Luxe.events.fire('got_drop', drop);
@@ -145,17 +163,28 @@ class Play extends State {
 	// 	}
     // }
 
-	function create_drop() {
-		var random = Math.random();
-		var drop = if (random < 0.1) {
-			new TimeDrop();
-		} else if (random < 0.2) {
-			new PoisonDrop();
-		} else if (random < 0.6) {
-			new RainDrop();
+	function get_drop(random :Float) {
+		trace(intro_number);
+		if (intro_number == screen_spring) { // spring
+			return (random < 0.4 ? new RainDrop() : new SunDrop());
+		} else if (intro_number == screen_summer) { // summer
+			if (random < 0.1) return new PoisonDrop();
+			return (random < 0.4 ? new RainDrop() : new SunDrop());
+		} else if (intro_number == screen_fall) { // fall
+			if (random < 0.1) return new PoisonDrop();
+			if (random < 0.2) return new TimeDrop();
+			return (random < 0.4 ? new RainDrop() : new SunDrop());
+		} else if (intro_number == screen_winter) { // winter
+			if (random < 0.2) return new PoisonDrop();
+			if (random < 0.3) return new TimeDrop();
+			return (random < 0.4 ? new RainDrop() : new SunDrop());
 		} else {
-			new SunDrop();
+			return new SunDrop();
 		}
+	}
+
+	function create_drop() {
+		var drop = get_drop(Math.random());
 		drop.pos = new Vector(-Luxe.screen.width / 2 + Luxe.screen.width * Math.random(), tree.get_top().y - Luxe.screen.height);
 		drops.push(drop);
 	}
