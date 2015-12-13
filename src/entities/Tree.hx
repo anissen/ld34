@@ -23,6 +23,9 @@ class Tree extends Entity {
     var lock_countdown :Float;
     public var highlight :Float;
     public var poison :Float;
+    var move_speed :Float;
+
+    var cursor :Vector = new Vector();
 
     public function new() {
         super({name: "Tree"});
@@ -44,12 +47,19 @@ class Tree extends Entity {
 
         Luxe.events.listen('got_rain', function(drop :Drop) {
             lock_countdown += 3;
+            move_speed = Math.min(move_speed + 100, 1000);
+        });
+
+        Luxe.events.listen('got_time', function(drop :Drop) {
+            move_speed = Math.min(move_speed + 50, 1000);
         });
 
         Luxe.events.listen('got_poison', function(drop :Drop) {
             lock_segment();
             remove_segment();
         });
+
+        move_speed = 1000;
     }
 
     function add_segment() {
@@ -67,6 +77,13 @@ class Tree extends Entity {
     }
 
     override public function update(dt :Float) {
+        move_speed = Math.max(move_speed - dt * 20, 100);
+        var cursorDiff = Vector.Subtract(Luxe.screen.cursor.pos, cursor);
+        if (cursorDiff.length > 5) {
+            cursor = Vector.Add(cursor, cursorDiff.normalized.multiplyScalar(dt * move_speed));
+        }
+        trace('move_speed: ' + move_speed);
+        trace('cursor: ' + cursor);
         lock_countdown -= dt;
         if (lock_countdown <= 0) {
             if (locked_segments < numSegments) lock_segment();
@@ -81,7 +98,7 @@ class Tree extends Entity {
     }
 
     function calc_tree() {
-        target = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
+        target = Luxe.camera.screen_point_to_world(cursor);
         // var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
         // var blah = new Vector(segments[0].x, segments[0].y);
         // target = new Vector((blah.x + pos.x) / 2, (blah.y + pos.y) / 2);

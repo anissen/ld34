@@ -128,7 +128,7 @@ class Play extends State {
 		var pos = tree.get_top();
 		for (drop in drops) {
 			if (drop.dropType == Poison && drop.pos.y < pos.y) {
-				drop.pos.x += Vector.Subtract(pos, drop.pos).normalized.multiplyScalar(dt * 100).x;
+				drop.pos.x += Vector.Subtract(pos, drop.pos).normalized.multiplyScalar(dt * 60).x;
 			}
 			if (Vector.Subtract(drop.pos, pos).length < 30) {
 				Luxe.events.fire('got_drop', drop);
@@ -162,7 +162,7 @@ class Play extends State {
 			new TimeDrop();
 		} else if (random < 0.2) {
 			new PoisonDrop();
-		} else if (random < 0.3) {
+		} else if (random < 0.6) {
 			new RainDrop();
 		} else {
 			new SunDrop();

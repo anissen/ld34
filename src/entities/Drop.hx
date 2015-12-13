@@ -14,6 +14,7 @@ enum DropType {
 
 class Drop extends Sprite {
     public var dropType :DropType;
+    var dropSpeed :Float = 200;
 
     public function new(options :luxe.options.SpriteOptions) {
         if (options.name == null) options.name = "Drop." + Luxe.utils.uniqueid();
@@ -21,7 +22,7 @@ class Drop extends Sprite {
     }
 
     override public function update(dt :Float) {
-        pos.y += dt * 200;
+        pos.y += dt * dropSpeed;
         pos.x += dt * (-10 + 20 * Math.random());
 
         // TODO: Tween this
@@ -91,5 +92,6 @@ class PoisonDrop extends Drop {
             scale: new Vector(rndScale, rndScale)
         });
         dropType = Poison;
+        dropSpeed = 100;
     }
 }
