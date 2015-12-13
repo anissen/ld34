@@ -33,6 +33,7 @@ class Main extends luxe.Game {
 		Luxe.renderer.clear_color = new luxe.Color(0.5, 0.6, 1.0, 1);
 
 		if (Luxe.audio.exists('background')) {
+			Luxe.audio.get('background').volume = 0.4;
 			Luxe.audio.get('background').loop();
 		}
 
@@ -63,6 +64,7 @@ class Main extends luxe.Game {
 
 		Luxe.events.listen('start_intro', function(index :Int) {
 			if (index - 1 >= intro_screens.length) return;
+			if (index > 1) Luxe.audio.play('ping');
 			fsm.enable('Intro', intro_screens[index - 1]);
 			effectsEnabled = false;
 		});
@@ -80,19 +82,23 @@ class Main extends luxe.Game {
 					shockwaveEffect.elapsed_effect_time = 0.0;
 			        shockwaveEffect.effect_time = 3.0;
 			        shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(drop.pos);
+					Luxe.audio.play('rain');
 					Luxe.camera.shake(3);
 					Luxe.events.fire('got_rain');
 				case Sun:
 					bloomEffect.radius = 3.5;
 					Luxe.camera.shake(3);
+					Luxe.audio.play('sun');
 					Luxe.events.fire('got_sun');
 				case Time:
 					sepiaEffect.amount = 0.8;
 					Luxe.timescale = 0.3;
 					luxe.tween.Actuate.tween(Luxe, 3, { timescale: 1 }); //.ease(luxe.tween.easing.Expo.easeInOut);
 					Luxe.camera.shake(3);
+					Luxe.audio.play('time');
 					Luxe.events.fire('got_time');
 				case Poison:
+					Luxe.audio.play('poison');
 					Luxe.camera.shake(10);
 					Luxe.events.fire('got_poison');
 			}

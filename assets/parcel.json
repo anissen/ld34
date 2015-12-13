@@ -25,6 +25,11 @@
         { "id": "assets/sprites/poison.png" }
     ],
     "sounds" : [
-        { "id" : "assets/music/background.ogg", "name" : "background", "is_stream" : true }
+        { "id" : "assets/music/background.ogg", "name" : "background", "is_stream" : true },
+        { "id" : "assets/sounds/ping.ogg", "name" : "ping", "is_stream" : false },
+        { "id" : "assets/sounds/sun.ogg", "name" : "sun", "is_stream" : false },
+        { "id" : "assets/sounds/rain.ogg", "name" : "rain", "is_stream" : false },
+        { "id" : "assets/sounds/time.ogg", "name" : "time", "is_stream" : false },
+        { "id" : "assets/sounds/poison.ogg", "name" : "poison", "is_stream" : false }
     ]
 }
