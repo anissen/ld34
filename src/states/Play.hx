@@ -75,8 +75,10 @@ class Play extends State {
         });
 
 		Luxe.events.listen('end_intro', function(_) {
+			if (intro_number >= 8) return;
+
 			overlay.color.tween(2, { a: 0 });
-			time_left = 30;
+			if (intro_number > 1) time_left = 30;
 			intro = false;
 		});
 	}

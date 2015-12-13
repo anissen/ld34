@@ -25,13 +25,14 @@ class Tree extends Entity {
     public var poison :Float;
     var move_speed :Float;
     var intro :Bool = false;
-
     var cursor :Vector;
 
     public function new() {
         super({name: "Tree"});
 
-        cursor = new Vector();
+        move_speed = 1000.0;
+
+        cursor = Luxe.screen.mid.clone();
         segments = [ for (i in 0 ... numSegments) { x: 0, y: 0, angle: 0 } ];
         var lastSegment = segments[numSegments-1];
         lastSegment.x = 0;
@@ -69,8 +70,6 @@ class Tree extends Entity {
         Luxe.events.listen('end_into', function(_) {
             intro = false;
         });
-
-        move_speed = 1000;
     }
 
     function add_segment() {
@@ -88,8 +87,13 @@ class Tree extends Entity {
     }
 
     override public function update(dt :Float) {
-        if (intro) dt = 0;
+        if (intro) dt = 0.0001;
         // if (cursor == null) return;
+
+        // untyped __js__("debugger;");
+        if (cursor.x == Math.NaN || cursor.y == Math.NaN || cursor.z == Math.NaN) {
+            cursor = Luxe.screen.cursor.pos.clone();
+        }
 
         move_speed = Math.max(move_speed - dt * 20, 100);
         var cursorDiff = Vector.Subtract(Luxe.screen.cursor.pos, cursor);
@@ -98,6 +102,8 @@ class Tree extends Entity {
         } else {
             cursor = Vector.Add(cursor, cursorDiff.normalized.multiplyScalar(dt * move_speed * 0.1));
         }
+        // trace('move_speed: ' + move_speed);
+        // trace('cursor: ' + cursor);
         lock_countdown -= dt;
         if (lock_countdown <= 0) {
             if (locked_segments < numSegments) lock_segment();
@@ -113,6 +119,7 @@ class Tree extends Entity {
 
     function calc_tree() {
         target = Luxe.camera.screen_point_to_world(cursor);
+
         // var pos = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
         // var blah = new Vector(segments[0].x, segments[0].y);
         // target = new Vector((blah.x + pos.x) / 2, (blah.y + pos.y) / 2);

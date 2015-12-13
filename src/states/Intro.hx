@@ -15,16 +15,20 @@ class Intro extends State {
 	var stateScene :Scene;
 
 	var overlay :Sprite;
+	var ending :Bool;
 
 	public function new() {
 		super({ name: 'Intro' });
 		stateScene = new Scene('Intro');
+		ending = false;
 	}
 
 	override function onenabled<T>(data :T) {
 		// lastStateScene = Luxe.scene;
 		// Luxe.scene = stateScene;
-		// Luxe.camera.center = new Vector();
+		Luxe.camera.center = new Vector();
+
+		ending = false;
 
 		overlay = new Sprite({
 			pos: Luxe.camera.center,
@@ -38,27 +42,27 @@ class Intro extends State {
         });
 
 		overlay.color.tween(2, { a: 1 });
-
-		spring_intro();
-	}
-
-	function spring_intro() {
-		// intro = true;
-		// Luxe.events.fire('start_intro', null);
 	}
 
 	override function onkeyup(event :luxe.Input.KeyEvent) {
-		Luxe.events.fire('end_intro', null);
+		end_intro();
 	}
 
 	override function onmouseup(event :luxe.Input.MouseEvent) {
-		Luxe.events.fire('end_intro', null);
+		end_intro();
+	}
+
+	function end_intro() {
+		if (ending) return;
+
+		ending = true;
+		overlay.color.tween(2, { a: 0 }).onComplete(function(_) {
+			Luxe.events.fire('end_intro', null);
+		});
 	}
 
 	override function ondisabled<T>(_:T) {
-		overlay.color.tween(2, { a: 0 }).onComplete(function(_) {
-			stateScene.empty();
-		});
+		stateScene.empty();
 		// Luxe.scene = lastStateScene;
 	}
 }
