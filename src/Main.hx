@@ -68,7 +68,6 @@ class Main extends luxe.Game {
 				fsm.disable('Intro');
 			}
 			effectsEnabled = true;
-			this.onrender();
 		});
 
 		Luxe.events.listen('got_drop', function(drop :entities.Drop) {
@@ -77,16 +76,20 @@ class Main extends luxe.Game {
 					shockwaveEffect.elapsed_effect_time = 0.0;
 			        shockwaveEffect.effect_time = 3.0;
 			        shockwaveEffect.mouse_pos = Luxe.camera.world_point_to_screen(drop.pos);
+					Luxe.camera.shake(3);
 					Luxe.events.fire('got_rain');
 				case Sun:
 					bloomEffect.radius = 3.5;
+					Luxe.camera.shake(3);
 					Luxe.events.fire('got_sun');
 				case Time:
 					sepiaEffect.amount = 0.8;
 					Luxe.timescale = 0.3;
 					luxe.tween.Actuate.tween(Luxe, 3, { timescale: 1 }); //.ease(luxe.tween.easing.Expo.easeInOut);
+					Luxe.camera.shake(3);
 					Luxe.events.fire('got_time');
 				case Poison:
+					Luxe.camera.shake(10);
 					Luxe.events.fire('got_poison');
 			}
 		});
@@ -108,7 +111,8 @@ class Main extends luxe.Game {
 
     }
 
-	override function update(dt:Float) {
+	override function update(dt :Float) {
+		if (!effectsEnabled) return;
 		if (bloomEffect != null && bloomEffect.radius > 2) bloomEffect.radius -= dt;
 		if (sepiaEffect != null && sepiaEffect.amount > 0) sepiaEffect.amount -= dt * 0.15;
 		effects.update(dt);

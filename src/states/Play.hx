@@ -57,12 +57,14 @@ class Play extends State {
 		new luxe.Sprite({
 			pos: new Vector(0, -220),
 			texture: Luxe.resources.texture('assets/backgrounds/montains.png'),
+			scale: new Vector(1.1, 1.1),
 			depth: -1
 		});
 
 		new luxe.Sprite({
 			pos: new Vector(0, -220),
 			texture: Luxe.resources.texture('assets/backgrounds/grass.png'),
+			scale: new Vector(1.1, 1.0),
 			depth: 1
 		});
 
@@ -81,7 +83,7 @@ class Play extends State {
             name: 'overlay',
             centered: true,
             size: Luxe.screen.size.clone().multiplyScalar(4),
-            color: new Color(0.8, 0.6, 0.1, 1),
+            color: new Color(0.85, 0.65, 0.1, 1),
             depth: 10
         });
 
@@ -90,7 +92,7 @@ class Play extends State {
 			if (intro_number > screen_winter) return;
 
 			// overlay.color.tween(2, { a: 0 }, true);
-			if (intro_number >= screen_spring && intro_number <= screen_winter) time_left = 5;
+			if (intro_number >= screen_spring && intro_number <= screen_winter) time_left = 20;
 		});
 	}
 
@@ -144,7 +146,7 @@ class Play extends State {
 			}
 		}
 		if (!intro) {
-			pos.x = Luxe.camera.center.x;
+			pos.x = 0;
 			pos.y = Math.min(pos.y, -Luxe.screen.height / 2 + 100);
 			Luxe.camera.focus(pos, 0.2);
 		}
@@ -152,7 +154,7 @@ class Play extends State {
 		next_drop -= dt;
 		if (next_drop <= 0) {
 			create_drop();
-			next_drop = 3 * Math.random();
+			next_drop = 2.5 * Math.random();
 		}
 	}
 

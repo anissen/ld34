@@ -56,7 +56,7 @@ class Intro extends State {
 		if (ending) return;
 
 		ending = true;
-		overlay.color.tween(2, { a: 0 }).onComplete(function(_) {
+		overlay.color.tween(1, { a: 0 }).onComplete(function(_) {
 			stateScene.empty();
 			Luxe.events.fire('end_intro', null);
 		});
